@@ -47,7 +47,7 @@ function Header({ mono, onToggleTheme, dark }) {
           <ZebraLogo size={34} mono={mono} intro />
           <span style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
           <span className="pill mono" style={{ marginLeft: 6 }}>
-            <span className="dot2" style={{ background: "var(--accent)" }}/> v0.9.3
+            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.05.01
           </span>
         </a>
         <nav style={{ display: "flex", alignItems: "center", gap: 28, fontFamily: "var(--font-mono)", fontSize: 13 }}>
@@ -417,10 +417,54 @@ function ViewSwitch({ view, setView }) {
   return (
     <div className="view-switch">
       {views.map(([k, label]) => (
-        <button key={k} className={view === k ? "active" : ""} onClick={() => setView(k)}>
-          {k} · {label}
+        <button
+          key={k}
+          className={view === k ? "active" : ""}
+          onClick={() => setView(k)}
+          title={`${k} · ${label}`}
+          aria-label={`${k} · ${label}`}
+        >
+          <span className="view-dot" />
+          <span className="view-label mono">{label}</span>
         </button>
       ))}
+    </div>
+  );
+}
+
+/* ─────────────────────────── Shared left hero ─────────────────────────── */
+function LeftHero() {
+  return (
+    <div>
+      <div className="pill mono" style={{ marginBottom: 20 }}>
+        <span className="dot2" style={{ background: "var(--accent)" }} /> routing, rewritten in Rust
+      </div>
+      <h1 style={{
+        fontSize: "clamp(40px, 5.4vw, 64px)", lineHeight: 1.04,
+        margin: "0 0 20px", letterSpacing: -1.2, fontWeight: 700,
+      }}>
+        Routing Software<br />
+        <span style={{ color: "var(--fg-soft)" }}>in the </span>
+        <span className="accent">AI&nbsp;Era.</span>
+      </h1>
+      <p style={{
+        fontSize: 17, lineHeight: 1.55, color: "var(--fg-soft)",
+        maxWidth: 520, margin: "0 0 28px",
+      }}>zebra-rs is a BGP, OSPF, and IS‑IS routing stack with SRv6, SR-MPLS, L3VPN, and EVPN extensions, written from scratch in Rust. Memory‑safe, async to the core, idempotent by design — and the first routing daemon to ship with a native MCP server for AI agents.</p>
+      <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", marginBottom: 28 }}>
+        <a className="btn btn-primary" href="#install">
+          Get started
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a className="btn btn-ghost" href="Docs.html">Read the docs</a>
+      </div>
+      <InstallStrip />
+      <div className="mono" style={{ marginTop: 22, fontSize: 11.5, color: "var(--fg-muted)", display: "flex", gap: 18, flexWrap: "wrap" }}>
+        <span>⚡ 14ms commit</span>
+        <span>🦀 100% safe Rust</span>
+        <span>◰ AGPLv3</span>
+        <span>🔌 MCP native</span>
+      </div>
     </div>
   );
 }
@@ -428,5 +472,5 @@ function ViewSwitch({ view, setView }) {
 /* expose */
 Object.assign(window, {
   ZebraLogo, Header, InstallStrip, ConfigTabs, FeatureCards, ProtocolsRow,
-  Footer, TweaksPanel, ViewSwitch,
+  Footer, TweaksPanel, ViewSwitch, LeftHero,
 });

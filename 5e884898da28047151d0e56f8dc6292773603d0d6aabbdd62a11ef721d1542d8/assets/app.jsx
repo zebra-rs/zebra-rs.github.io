@@ -65,12 +65,19 @@ function App() {
       <div className="grid-bg" />
       <Header mono={mono} dark={dark} onToggleTheme={() => setDark(d => !d)} />
 
-      <ViewSwitch view={view} setView={setView} />
-
       <main className="container" style={{ paddingTop: 10 }}>
-        {view === "A" && <TerminalHero />}
-        {view === "B" && <RoutesHero />}
-        {view === "C" && <TopologyHero />}
+        <div style={{
+          display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.1fr)",
+          gap: 48, alignItems: "start", padding: "56px 0 16px",
+        }}>
+          <LeftHero />
+          <div>
+            {view === "A" && <TerminalPanel />}
+            {view === "B" && <RoutesPanel />}
+            {view === "C" && <TopologyPanel />}
+            <ViewSwitch view={view} setView={setView} />
+          </div>
+        </div>
 
         <section style={{ paddingTop: 48 }}>
           <SectionHead eyebrow="features" title="Built for the modern edge." />
