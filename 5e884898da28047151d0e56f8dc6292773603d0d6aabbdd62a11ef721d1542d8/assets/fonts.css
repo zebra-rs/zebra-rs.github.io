@@ -10,6 +10,13 @@
 @font-face {
   font-family: 'DejaVu Sans Web';
   font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/dejavu-fonts/dejavu-fonts@version_2_37/ttf/DejaVuSans-ExtraLight.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DejaVu Sans Web';
+  font-style: normal;
   font-weight: 400;
   font-display: swap;
   src: url('https://cdn.jsdelivr.net/gh/dejavu-fonts/dejavu-fonts@version_2_37/ttf/DejaVuSans.ttf') format('truetype');
@@ -43,7 +50,7 @@
   /* The renamed family ('DejaVu Sans Web') guarantees both Chrome and Safari
      use the downloaded TTF rather than any local DejaVu the user may have
      installed (which can have different metrics). */
-  --font-display: 'DejaVu Sans Web', 'DejaVu Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-display: 'DejaVu Sans Web', 'DejaVu Sans Book', 'DejaVu Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 }
 

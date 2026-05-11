@@ -121,7 +121,7 @@ function SectionHead({ eyebrow, title }) {
         color: "var(--fg-muted)", marginBottom: 10,
       }}>— {eyebrow}</div>
       <h2 style={{
-        margin: 0, fontSize: "clamp(26px, 3vw, 36px)", fontWeight: 600,
+        margin: 0, fontSize: "clamp(26px, 3vw, 36px)", fontWeight: 400,
         letterSpacing: -0.6, maxWidth: 760,
       }}>{title}</h2>
     </div>

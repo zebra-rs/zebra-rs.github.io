@@ -443,7 +443,7 @@ function LeftHero() {
       </div>
       <h1 className="hero-h1" style={{
         fontSize: "clamp(34px, 5.4vw, 64px)", lineHeight: 1.04,
-        margin: "0 0 20px", letterSpacing: -1.2, fontWeight: 700,
+        margin: "0 0 20px", letterSpacing: -1.2, fontWeight: 400,
       }}>
         Routing Software<br />
         <span style={{ color: "var(--fg-soft)" }}>in the </span>
