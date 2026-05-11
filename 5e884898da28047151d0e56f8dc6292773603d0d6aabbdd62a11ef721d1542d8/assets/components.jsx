@@ -43,7 +43,7 @@ function Header({ mono, onToggleTheme, dark }) {
         display: "flex", alignItems: "center", justifyContent: "space-between",
         height: 64, gap: 16,
       }}>
-        <a href="#" className="site-nav-brand">
+        <a href="index.html" className="site-nav-brand">
           <ZebraLogo size={34} mono={mono} intro />
           <span className="brand-word" style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
           <span className="pill mono brand-pill">
