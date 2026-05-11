@@ -100,9 +100,9 @@ function TerminalPanel() {
         <span style={{ marginLeft: 10 }}>zebra@edge-01 — zsh — 82×24</span>
         <span style={{ marginLeft: "auto", color: "var(--fg-soft)" }}>● live</span>
       </div>
-      <div ref={termRef} className="term mono" style={{
+      <div ref={termRef} className="term mono panel-body" style={{
         padding: "16px 18px", fontSize: 12.5, lineHeight: 1.75,
-        height: 480, overflow: "auto", background: "var(--bg-card)",
+        overflow: "auto", background: "var(--bg-card)",
         color: "var(--fg)",
       }}>{rendered}</div>
     </div>

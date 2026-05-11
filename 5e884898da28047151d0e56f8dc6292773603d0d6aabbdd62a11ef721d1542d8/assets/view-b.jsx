@@ -58,7 +58,7 @@ function RoutesPanel() {
           <span className="accent">↺ live</span>
         </span>
       </div>
-      <div style={{ overflowX: "auto", maxHeight: 480 }}>
+      <div className="panel-body" style={{ overflowX: "auto", overflowY: "auto" }}>
         <table className="route-table">
           <thead>
             <tr>

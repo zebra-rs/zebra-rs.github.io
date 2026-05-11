@@ -66,10 +66,7 @@ function App() {
       <Header mono={mono} dark={dark} onToggleTheme={() => setDark(d => !d)} />
 
       <main className="container" style={{ paddingTop: 10 }}>
-        <div style={{
-          display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.1fr)",
-          gap: 48, alignItems: "start", padding: "56px 0 16px",
-        }}>
+        <div className="hero-grid">
           <LeftHero />
           <div>
             {view === "A" && <TerminalPanel />}

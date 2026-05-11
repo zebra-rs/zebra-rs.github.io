@@ -41,20 +41,20 @@ function Header({ mono, onToggleTheme, dark }) {
     }}>
       <div className="container" style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
-        height: 64, gap: 24,
+        height: 64, gap: 16,
       }}>
-        <a href="#" style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
+        <a href="#" className="site-nav-brand">
           <ZebraLogo size={34} mono={mono} intro />
-          <span style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
-          <span className="pill mono" style={{ marginLeft: 6 }}>
+          <span className="brand-word" style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
+          <span className="pill mono brand-pill">
             <span className="dot2" style={{ background: "var(--accent)" }}/> v26.05.01
           </span>
         </a>
-        <nav style={{ display: "flex", alignItems: "center", gap: 28, fontFamily: "var(--font-mono)", fontSize: 13 }}>
-          <a href="#features" style={{ color: "var(--fg-soft)" }}>features</a>
-          <a href="#install" style={{ color: "var(--fg-soft)" }}>install</a>
-          <a href="Docs.html" style={{ color: "var(--fg-soft)" }}>docs</a>
-          <a href="#protocols" style={{ color: "var(--fg-soft)" }}>protocols</a>
+        <nav className="site-nav">
+          <a className="nav-link nav-link-secondary" href="#features" style={{ color: "var(--fg-soft)" }}>features</a>
+          <a className="nav-link nav-link-secondary" href="#install" style={{ color: "var(--fg-soft)" }}>install</a>
+          <a className="nav-link" href="Docs.html" style={{ color: "var(--fg-soft)" }}>docs</a>
+          <a className="nav-link nav-link-secondary" href="#protocols" style={{ color: "var(--fg-soft)" }}>protocols</a>
           <a href="https://github.com/zebra-rs/zebra-rs" target="_blank" rel="noopener" style={{ color: "var(--fg-soft)", display: "inline-flex", gap: 6, alignItems: "center" }}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/></svg>
             github
@@ -98,48 +98,52 @@ function InstallStrip() {
 }
 
 /* ─────────────────────────── Tabbed config ─────────────────────────── */
-const CFG_CLI = `routing {
+const CFG_CLI = `router {
   bgp {
     global {
-      as 64512;
-      identifier 10.211.55.91;
+      as 65501;
+      identifier 10.0.0.1;
     }
-    neighbor 10.0.0.1 {
-      afi-safi l3vpn-ipv4-unicast {
+    neighbor 10.0.0.2 {
+      afi-safi vpnv4 {
         enabled true;
       }
-      peer-as 64512;
+      peer-as 65501;
     }
   }
 }`;
 
-const CFG_YAML = `routing:
+const CFG_YAML = `router:
   bgp:
     global:
-      as: 64512
-      identifier: 10.211.55.91
+      as: 65501
+      identifier: 10.0.0.1
     neighbor:
-    - remote-address: 10.0.0.1
+    - remote-address: 10.0.0.2
       afi-safi:
-      - name: l3vpn-ipv4-unicast
+      - name: vpnv4
         enabled: true
-      peer-as: 64512`;
+      peer-as: 65501`;
 
 const CFG_JSON = `{
-  "routing": {
+  "router": {
     "bgp": {
       "global": {
-        "as": 64512,
-        "identifier": "10.211.55.91"
+        "as": 65501,
+        "identifier": "10.0.0.1"
       },
-      "neighbor": [{
-        "remote-address": "10.0.0.1",
-        "afi-safi": [{
-          "name": "l3vpn-ipv4-unicast",
-          "enabled": true
-        }],
-        "peer-as": 64512
-      }]
+      "neighbor": [
+        {
+          "remote-address": "10.0.0.2",
+          "afi-safi": [
+            {
+              "name": "vpnv4",
+              "enabled": true
+            }
+          ],
+          "peer-as": 65501
+        }
+      ]
     }
   }
 }`;
@@ -197,9 +201,7 @@ function syntaxTint(s, kind) {
 /* ─────────────────────────── Feature cards ─────────────────────────── */
 function FeatureCards() {
   return (
-    <div id="features" style={{
-      display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20,
-    }}>
+    <div id="features" className="features-grid">
       <div className="card">
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
           <FeatIcon kind="config" />
@@ -347,13 +349,13 @@ function Footer() {
       padding: "40px 0 60px", fontFamily: "var(--font-mono)", fontSize: 12,
       color: "var(--fg-muted)",
     }}>
-      <div className="container" style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 32 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div className="container site-footer-inner">
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           <ZebraLogo size={24} />
           <span style={{ color: "var(--fg-soft)" }}>zebra-rs</span>
           <span>© 2026</span>
         </div>
-        <div style={{ display: "flex", gap: 28 }}>
+        <div className="site-footer-links">
           <a href="Docs.html">docs</a><a href="https://github.com/zebra-rs/zebra-rs" target="_blank" rel="noopener">github</a><a href="https://crates.io/crates/zebra-rs" target="_blank" rel="noopener">crates.io</a>
           <a href="#">blog</a><a href="#">community</a>
         </div>
@@ -439,8 +441,8 @@ function LeftHero() {
       <div className="pill mono" style={{ marginBottom: 20 }}>
         <span className="dot2" style={{ background: "var(--accent)" }} /> routing, rewritten in Rust
       </div>
-      <h1 style={{
-        fontSize: "clamp(40px, 5.4vw, 64px)", lineHeight: 1.04,
+      <h1 className="hero-h1" style={{
+        fontSize: "clamp(34px, 5.4vw, 64px)", lineHeight: 1.04,
         margin: "0 0 20px", letterSpacing: -1.2, fontWeight: 700,
       }}>
         Routing Software<br />
@@ -451,7 +453,7 @@ function LeftHero() {
         fontSize: 17, lineHeight: 1.55, color: "var(--fg-soft)",
         maxWidth: 520, margin: "0 0 28px",
       }}>zebra-rs is a BGP, OSPF, and IS‑IS routing stack with SRv6, SR-MPLS, L3VPN, and EVPN extensions, written from scratch in Rust. Memory‑safe, async to the core, idempotent by design — and the first routing daemon to ship with a native MCP server for AI agents.</p>
-      <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", marginBottom: 28 }}>
+      <div className="hero-cta">
         <a className="btn btn-primary" href="#install">
           Get started
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
@@ -459,7 +461,7 @@ function LeftHero() {
         <a className="btn btn-ghost" href="Docs.html">Read the docs</a>
       </div>
       <InstallStrip />
-      <div className="mono" style={{ marginTop: 22, fontSize: 11.5, color: "var(--fg-muted)", display: "flex", gap: 18, flexWrap: "wrap" }}>
+      <div className="mono hero-meta">
         <span>⚡ 14ms commit</span>
         <span>🦀 100% safe Rust</span>
         <span>◰ AGPLv3</span>

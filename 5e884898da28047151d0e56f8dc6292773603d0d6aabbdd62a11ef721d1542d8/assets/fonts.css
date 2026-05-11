@@ -1,8 +1,55 @@
-/* Type system for zebra-rs landing */
-@import url('https://fonts.cdnfonts.com/css/dejavu-sans');
+/* Type system for zebra-rs landing
+   The Chrome reference renders the headline in DejaVu Sans (wide, rounded
+   letterforms). macOS does not ship DejaVu Sans, so Safari was falling
+   back to Helvetica with different metrics.
+
+   Fix: load DejaVu Sans via explicit @font-face from a stable CDN with NO
+   local() lookup, so every browser fetches and uses the same WOFF file.
+   Put DejaVu Sans first in the display stack. */
+
+@font-face {
+  font-family: 'DejaVu Sans Web';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/dejavu-fonts/dejavu-fonts@version_2_37/ttf/DejaVuSans.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DejaVu Sans Web';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/dejavu-fonts/dejavu-fonts@version_2_37/ttf/DejaVuSans-Oblique.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DejaVu Sans Web';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/dejavu-fonts/dejavu-fonts@version_2_37/ttf/DejaVuSans-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DejaVu Sans Web';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/dejavu-fonts/dejavu-fonts@version_2_37/ttf/DejaVuSans-BoldOblique.ttf') format('truetype');
+}
+
+/* JetBrains Mono — already self-consistent across browsers */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
-  --font-display: 'DejaVu Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* The renamed family ('DejaVu Sans Web') guarantees both Chrome and Safari
+     use the downloaded TTF rather than any local DejaVu the user may have
+     installed (which can have different metrics). */
+  --font-display: 'DejaVu Sans Web', 'DejaVu Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* Prevent faux-bold synthesis (Safari otherwise renders synthesized bold
+   differently from Chrome). */
+body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, a {
+  font-synthesis: none;
+  -webkit-font-synthesis: none;
 }

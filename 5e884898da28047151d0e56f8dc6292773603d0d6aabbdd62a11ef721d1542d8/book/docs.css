@@ -14,8 +14,14 @@
   .docs-toc { display: none; }
 }
 @media (max-width: 780px) {
-  .docs-shell { grid-template-columns: 1fr; gap: 24px; }
-  .docs-sidebar { position: static !important; max-height: none !important; }
+  .docs-shell { grid-template-columns: 1fr; gap: 24px; padding: 20px 16px 60px; }
+  .docs-sidebar { position: static !important; max-height: 280px !important; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .docs-main { font-size: 15px; }
+  .docs-main h1 { font-size: 28px; }
+  .docs-main h2 { font-size: 20px; margin: 32px 0 12px; }
+  .docs-main h3 { font-size: 16px; }
+  .docs-pager { flex-direction: column; gap: 10px; }
+  .docs-pager a.next { text-align: left; }
 }
 
 .docs-sidebar {
