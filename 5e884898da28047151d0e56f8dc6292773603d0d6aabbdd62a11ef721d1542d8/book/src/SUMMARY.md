@@ -15,8 +15,27 @@
 - [BGP](ch-02-00-what-is-bgp.md)
   - [Dynamic Neighbors](ch-02-01-dynamic-neighbors.md)
   - [Session Authentication (TCP MD5 / TCP-AO)](ch-02-02-tcp-authentication.md)
+  - [Timer Configuration](ch-02-03-bgp-timers.md)
+  - [L3VPN and Per-VRF Labels](ch-02-04-bgp-l3vpn.md)
+  - [L3VPN over an SRv6 Underlay](ch-02-05-bgp-l3vpn-srv6.md)
+  - [EVPN Type-5 (IP Prefix Routes)](ch-02-06-bgp-evpn-type5.md)
+  - [Route Target Constraint (RTC)](ch-02-07-bgp-rtc.md)
+  - [BFD](ch-02-08-bgp-bfd.md)
 - [IS-IS](ch-07-00-isis.md)
   - [Timer Configuration](ch-07-01-isis-timers.md)
+  - [Shared Risk Link Group (SRLG)](ch-07-02-isis-srlg.md)
+  - [BFD](ch-07-03-isis-bfd.md)
+- [OSPFv2](ch-08-00-ospf.md)
+  - [Configuration](ch-08-01-ospf-configuration.md)
+  - [BFD](ch-08-02-ospf-bfd.md)
+
+## Failure Detection
+
+- [Bidirectional Forwarding Detection (BFD)](ch-10-00-bfd.md)
+
+## Performance Measurement
+
+- [Link Delay Measurement (TWAMP Light / STAMP)](ch-09-00-twamp-stamp.md)
 
 ## SRv6
 
