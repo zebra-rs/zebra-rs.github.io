@@ -25,12 +25,13 @@ where they matter.
 
 ## You do not enable BFD globally
 
-There is **no global "turn BFD on" switch**. The BFD subsystem is
-spawned automatically the moment any consumer is configured — a
-`router bgp`, `router isis`, `router ospf`, or `router ospfv3` block —
-and it is always brought up *before* the protocol that uses it, so the
-order in which you type the configuration never matters. Attaching BFD
-to a neighbour is then a single per-neighbour / per-interface flag:
+There is **no global "turn BFD on" switch**, and there are **no BFD
+configuration leaves of its own**. The BFD subsystem is spawned
+automatically the moment any consumer is configured — a `router bgp`,
+`router isis`, `router ospf`, or `router ospfv3` block — and it is
+always brought up *before* the protocol that uses it, so the order in
+which you type the configuration never matters. Attaching BFD to a
+neighbour is then a single per-neighbour / per-interface flag:
 
 ```
 router ospf {
@@ -42,9 +43,11 @@ router ospf {
 }
 ```
 
-That is the whole story for the common case. The optional top-level
-`bfd { … }` block (below) exists only to define reusable **profiles**;
-it is not required to use BFD.
+That is the whole story. All BFD is configured *per protocol*; there is
+no standalone `bfd { peer … }` or `bfd { profile … }` block — earlier
+revisions had both, but they were inert (parsed but never wired to a
+live session) and have been removed. The top-level `bfd` keyword exists
+only as the FRR-style enable anchor and takes no sub-configuration.
 
 > This matches FRR, where `neighbor X bfd` / `ip ospf bfd` "just work"
 > without a separate global daemon switch. Earlier revisions of
@@ -66,17 +69,40 @@ The session is torn down only when the last consumer detaches.
 
 Timers are negotiated from each side's *desired transmit* and *required
 receive* intervals; the detection time is `received-tx-interval ×
-detect-multiplier`. The shipped defaults are conservative:
+detect-multiplier`. The shipped defaults are aligned with FRR:
 
 | Parameter | Default |
 |---|---|
-| Transmit interval | 1000 ms |
-| Receive interval | 1000 ms |
+| Transmit interval | 300 ms |
+| Receive interval | 300 ms |
 | Detect multiplier | 3 |
 
-giving a ~3-second detection time out of the box. (See
-[Profiles](#profiles-not-yet-applied) for the current status of tuning
-these.)
+giving a **~900 ms** detection time out of the box. These intervals are
+not currently tunable (the configuration leaves that would set them
+were removed — see [Tuning](#tuning-intervals)); every session runs
+with the defaults above.
+
+### Slow transmit while not Up
+
+Per RFC 5880 §6.8.3, while a session is **not** `Up` the transmit
+interval is clamped to **at least one second**, regardless of the
+configured rate. This keeps a session that is still coming up — or that
+is probing a dead neighbour — from sending at the full sub-second rate.
+The configured (fast) rate is restored the moment the session reaches
+`Up`. Because this changes the advertised interval, zebra-rs announces
+the change with a **Poll Sequence** (§6.8.7): the `Poll` bit is set on
+outgoing packets across the up/down boundary until the peer answers with
+a `Final`. zebra-rs both initiates Poll Sequences and answers a peer's
+Poll with a Final.
+
+### Local source address
+
+A session's local address — the source address on the control packets it
+sends — is taken from the consumer. For BGP this is the neighbour's
+`update-source`; for OSPF / IS-IS it is the interface address the
+protocol already uses. When no source is configured the address is left
+unspecified and the kernel selects one per the route. The chosen source
+is what `show bfd peers` reports as `Local address`.
 
 ## Single-hop vs multi-hop
 
@@ -93,6 +119,10 @@ and is dropped. Multi-hop sessions relax this to a configurable floor
 so a packet that legitimately crossed a few hops is still accepted but
 a spoofed far-away packet is not.
 
+The two transports are kept strictly separate: a packet that arrives on
+the single-hop port (3784) is never allowed to drive a multi-hop session
+and vice-versa, even when the same neighbour has both.
+
 OSPF and IS-IS sessions are **always single-hop** (their neighbours are,
 by definition, on a shared link). BGP chooses per neighbour: directly
 connected eBGP is single-hop, while iBGP and eBGP-over-loopback are
@@ -107,41 +137,27 @@ demultiplexed per **ifindex**, since the same `fe80::` address can
 appear on several interfaces. The egress interface is pinned for
 link-local destinations so packets leave the right link.
 
-## Profiles (not yet applied)
+## Tuning intervals
 
-A top-level `bfd { … }` block defines named parameter **profiles** that
-a neighbour can reference by name:
+There is currently **no way to tune the BFD timers** — every session
+runs with the FRR-aligned defaults (300 ms / ×3 ⇒ ~900 ms detection).
 
-```
-bfd {
-  profile FAST {
-    detect-multiplier 3;
-    transmit-interval 300;   // milliseconds
-    receive-interval 300;
-    minimum-ttl 250;         // multi-hop only
-  }
-}
-```
-
-> **Current limitation.** A `profile` reference on a neighbour is
-> parsed and stored, but it is **not yet resolved into the live
-> session** — every session currently runs with the conservative
-> defaults in the table above (1000 ms / ×3). This means `show bfd
-> peer` reports 1000 ms timers regardless of the profile you select.
-> Wiring profiles through to session parameters is a shared follow-up
-> across all three protocols. Until then, the top-level block and the
-> per-neighbour `profile` leaf are accepted but have no effect on
-> timers.
+Earlier revisions accepted a top-level `bfd { profile … }` block plus a
+per-neighbour / per-interface `profile <name>` reference, but the
+profile parameters were never resolved into the live session, so they
+had no effect on timers. Both the top-level block and the per-protocol
+`profile` leaf have been removed. Configurable timers (per-protocol or
+via a reinstated profile mechanism) are a possible future addition.
 
 ## Verifying sessions
 
 Three `show` commands surface BFD state:
 
 ```
-show bfd                  # one-line-per-session summary table
-show bfd peer             # FRR-style detail block for every session
-show bfd peer 10.0.0.2    # detail for a single peer
-show bfd counters         # per-session control-packet counters
+show bfd                   # one-line-per-session summary table
+show bfd peers             # FRR-style detail block for every session
+show bfd peers 10.0.0.2    # detail for a single peer
+show bfd counters          # per-session control-packet counters
 ```
 
 `show bfd` gives a quick health table:
@@ -151,7 +167,7 @@ Peer             State    Local/Remote Disc      Uptime     Iface
 10.0.0.2         Up       0xd6b24a5/0x3f0a112    00:14:22   single-hop
 ```
 
-`show bfd peer [<addr>]` prints the FRR-style indented detail block —
+`show bfd peers [<addr>]` prints the FRR-style indented detail block —
 discriminators, status and up/down time, diagnostics, the negotiated
 local and remote timers, and (for multi-hop) the minimum TTL. A fresh
 session that has not yet heard from the peer shows `State Down` with a
@@ -166,6 +182,74 @@ receive path is alive).
 
 Each command also accepts a trailing `json` for machine-readable output.
 
+## Tracing
+
+The BFD task is quiet by default. A single runtime flag turns on its
+diagnostic traces — session FSM transitions, control-packet handling, and
+the Echo reflector (`xdp-bfd-echo`) lifecycle:
+
+```
+set bfd tracing true     # enable
+set bfd tracing false    # disable (or: delete bfd tracing)
+```
+
+It is a runtime toggle — no restart, and no rebuild — backed by a single
+global flag, so it also covers the parts of BFD that run outside the main
+task (the socket read/write tasks and the per-interface Echo reflector
+IPC). It is not per-session or per-interface; it is on or off for the
+whole BFD task.
+
+The info- and warn-level traces appear at the **default** log level once
+the flag is on, so `set bfd tracing true` is usually enough. The more
+verbose per-packet, debug-level traces additionally need the log level
+raised (e.g. `RUST_LOG=debug`), matching their original verbosity. With
+the flag off, every BFD trace is suppressed regardless of `RUST_LOG`.
+
+This is distinct from the per-protocol BFD tracing under
+`router bgp tracing { bfd }`, `router isis tracing { bfd }`, etc., which
+trace how *that protocol* reacts to BFD events; `set bfd tracing` traces
+the BFD task itself.
+
+## Echo function
+
+The BFD **Echo function** (RFC 5880 §6.4 / RFC 5881 §6) is a forwarding-plane
+liveness test: a node sends a *self-addressed* UDP/3785 packet that the peer's
+forwarding plane loops straight back, and times the round trip. Because the
+loop never enters the peer's BFD control software, it detects a forwarding
+fault even while control packets still flow — and it lets a node slow its
+control-packet rate while keeping fast detection. Echo is **single-hop IPv4
+only** (RFC 5883 multi-hop has no Echo).
+
+The two halves are independent and zebra-rs implements both, offloaded to a
+per-interface XDP/eBPF helper, **`xdp-bfd-echo`**:
+
+- **Responder** — when we advertise a non-zero `Required Min Echo RX Interval`,
+  the helper's XDP program loops a peer's Echo back in the data plane
+  (decrementing TTL so it returns at 254, the way a forwarding hop would), so
+  the *peer* gets fast detection. We only advertise non-zero once the helper is
+  confirmed running, so the promise to loop is honest.
+- **Originator** — the helper sends our Echo from a raw `AF_PACKET` socket and
+  the XDP program arms a per-session in-kernel `bpf_timer` on each return; if
+  returns stop for `interval × detect-mult`, the session goes `Down` with
+  diagnostic `Echo Function Failed` (RFC 5880 §6.8.5). We only originate while
+  the session is `Up` and the peer advertised a non-zero echo-rx (§6.8.9).
+
+The helper is reference-counted **per interface**: one `xdp-bfd-echo` process is
+spawned for each interface that has at least one Echo-enabled session, shared by
+all sessions on that link, and stopped when the last one goes away. It needs
+`cap_net_admin,cap_bpf` (load/attach XDP) and `cap_net_raw` (the originator's
+raw socket); the packaged install grants these. A node with no Echo configured
+runs no helper and advertises `Required Min Echo RX Interval = 0`.
+
+Echo is enabled per attachment — on OSPF and IS-IS interfaces, and on
+single-hop eBGP neighbours, where `echo-mode` selects the role
+(`transmit` / `receive` / `both`) and `echo-transmit-interval` /
+`echo-receive-interval` set the rates; see
+[OSPF BFD](ch-08-02-ospf-bfd.md#echo), [IS-IS BFD](ch-07-03-isis-bfd.md#echo),
+and [BGP BFD](ch-02-08-bgp-bfd.md#echo).
+`show bfd peers` reports the negotiated `Echo receive interval` /
+`Echo transmission interval`.
+
 ## What happens on failure
 
 When a session transitions to `Down`, every attached protocol is
@@ -179,7 +263,18 @@ native timers would allow.
 ## Status and roadmap
 
 - **Done:** single- and multi-hop, IPv4 and IPv6; BGP, IS-IS, OSPFv2
-  and OSPFv3 attachment; the three `show` commands.
-- **Not yet:** profile parameters are stored but not applied to live
-  sessions (sessions use the defaults); BFD for **static routes** is a
-  planned future phase; per-VRF OSPF BFD is not yet wired.
+  and OSPFv3 attachment; the three `show` commands; FRR-aligned 300 ms
+  defaults; RFC 5880 §6.8.3 slow-transmit-while-not-Up with §6.8.7 Poll
+  Sequences (both initiating and answering); BGP `update-source`
+  inherited as the session's local address; the **Echo function**
+  (RFC 5880 §6.4, single-hop IPv4) — both reflecting a peer's Echo and
+  originating our own, offloaded to the `xdp-bfd-echo` XDP/eBPF helper
+  (see [Echo function](#echo-function) below), with per-role
+  (`transmit` / `receive` / `both`) config and an instance-level
+  `router <proto> { bfd {} }` default inherited and overridden per
+  interface / neighbour. Echo is configurable on OSPF, IS-IS, and
+  single-hop eBGP (BGP echo is inert on multihop sessions — RFC 5883 has
+  no Echo).
+- **Not yet:** configurable control-packet timers (the intervals are
+  fixed at the defaults); BFD for **static routes**; per-VRF OSPF BFD;
+  a BFD `profile` mechanism.

@@ -23,15 +23,23 @@ router bgp {
 }
 ```
 
-No top-level `bfd { }` block is required — the BFD subsystem starts
-automatically with `router bgp`.
+There is no global top-level `bfd { }` block — the BFD subsystem starts
+automatically with `router bgp`. The same `bfd {}` leaves can be set once at the
+**instance level** (`router bgp { bfd {} }`) as a default for every neighbour,
+overridden per neighbour (see [Instance-level defaults](#instance-level-defaults)).
 
 | Leaf | Type | Default | Meaning |
 |---|---|---|---|
-| `enable` | boolean | `false` | Attach (or, on `false` / delete, detach) a BFD session for this neighbour. |
-| `multihop` | boolean | *inferred* | Force the hop mode. Unset ⇒ inferred (see below). |
-| `minimum-ttl` | 1–254 | 254 | Multi-hop only: lowest accepted received TTL (RFC 5883). Ignored single-hop. |
-| `profile` | string | — | Named `/bfd/profile` to apply. *Stored but not yet applied — see the overview.* |
+| `enable` | boolean | _(off)_ | Attach (or, on `false` / delete, detach) a BFD session for this neighbour. |
+| `multihop` | boolean | *inferred* | Force the hop mode. Unset ⇒ inferred (see below). Per-neighbour only. |
+| `minimum-ttl` | 1–254 | 254 | Multi-hop only: lowest accepted received TTL (RFC 5883). Ignored single-hop. Per-neighbour only. |
+| `echo-mode` | `transmit` \| `receive` \| `both` | _(off)_ | [Echo function](ch-10-00-bfd.md#echo-function) role — **single-hop only** (see [Echo](#echo)). |
+| `echo-transmit-interval` | uint (ms) | `50` | Echo TX rate (`transmit` / `both`). |
+| `echo-receive-interval` | uint (ms) | `50` | Advertised Required Min Echo RX (`receive` / `both`). |
+
+Control-packet intervals use the BFD defaults (300 ms / ×3 ⇒ ~900 ms
+detection) and are not currently tunable — see
+[Tuning intervals](ch-10-00-bfd.md#tuning-intervals) in the overview.
 
 ## Single-hop vs multi-hop — inferred by default
 
@@ -65,12 +73,61 @@ router bgp {
 
 The session's local address is taken from the neighbour's
 `update-source` (falling back to an unspecified address of the right
-family); there is no separate BFD source knob.
+family); there is no separate BFD source knob. This is the address the
+BFD control packets are actually sourced from, and the one `show bfd
+peers` reports as `Local address`. Changing `update-source` on a
+BFD-enabled neighbour rebuilds the session with the new source.
+
+## Echo
+
+`echo-mode` turns on the [BFD Echo function](ch-10-00-bfd.md#echo-function) —
+but Echo is **single-hop only** (RFC 5883 multihop has no Echo), so it applies
+**only to directly-connected eBGP** (`multihop` inferred or forced `false`). On
+an iBGP or multihop-eBGP neighbour the `echo-mode` leaf is accepted but inert.
+Within that constraint it works like the OSPF/IS-IS form — `transmit` originates,
+`receive` advertises + reflects, `both` does both, via the per-interface
+`xdp-bfd-echo` helper:
+
+```
+router bgp {
+  neighbor 10.0.0.2 {        // directly-connected eBGP
+    remote-as 65002;
+    bfd {
+      enable true;
+      echo-mode both;
+      echo-transmit-interval 50;
+      echo-receive-interval 50;
+    }
+  }
+}
+```
+
+## Instance-level defaults
+
+A `bfd {}` block directly under `router bgp` supplies defaults for **every**
+neighbour; the effective value of each leaf is the per-neighbour setting if
+present, else the instance default, else the hard default. `enable true` at the
+instance level **blanket-enables** BFD on all neighbours; a per-neighbour
+`bfd { enable false }` opts one out. (`multihop` / `minimum-ttl` are
+per-neighbour only — they are not inherited.)
+
+```
+router bgp {
+  bfd {
+    enable true;          // BFD on every neighbour…
+    echo-mode receive;    // …default Echo role (single-hop neighbours)
+  }
+  neighbor 10.0.0.2 {
+    remote-as 65002;
+    bfd { echo-mode both; }   // override; inherits enable
+  }
+}
+```
 
 ## Verifying
 
 ```
-show bfd peer 10.0.0.2
+show bfd peers 10.0.0.2
 ```
 
 A multi-hop session shows `(multihop)` and its `Minimum TTL`; a
