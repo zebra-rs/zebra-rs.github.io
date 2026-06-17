@@ -80,7 +80,7 @@ interface:
   ipv4: { address: 10.1.0.1/30 }
 router:
   bgp:
-    global: { as: 65000, identifier: 1.1.1.1 }
+    global: { as: 65000, router-id: 1.1.1.1 }
     neighbor:
     - remote-address: 1.1.1.3        # ASBR1, intra-AS VPNv4
       remote-as: 65000
@@ -106,7 +106,7 @@ interface:
   ipv4: { address: 172.16.0.1/30 }   # inter-AS link, GLOBAL table
 router:
   bgp:
-    global: { as: 65000, identifier: 1.1.1.3 }
+    global: { as: 65000, router-id: 1.1.1.3 }
     neighbor:
     - remote-address: 1.1.1.1          # PE1, intra-AS VPNv4
       remote-as: 65000
@@ -197,7 +197,7 @@ local-AS one learned from its PE, the remote-AS one from the other ASBR
 (note the AS path):
 
 ```
-asbr1$ show ip bgp vpnv4
+asbr1$ show bgp vpnv4
 Route Distinguisher: 65000:1
  *>i 10.1.0.0/30   1.1.1.1      ...   i        # from PE1 (intra-AS VPNv4)
 Route Distinguisher: 65001:1

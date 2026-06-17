@@ -36,6 +36,7 @@ overridden per neighbour (see [Instance-level defaults](#instance-level-defaults
 | `echo-mode` | `transmit` \| `receive` \| `both` | _(off)_ | [Echo function](ch-10-00-bfd.md#echo-function) role — **single-hop only** (see [Echo](#echo)). |
 | `echo-transmit-interval` | uint (ms) | `50` | Echo TX rate (`transmit` / `both`). |
 | `echo-receive-interval` | uint (ms) | `50` | Advertised Required Min Echo RX (`receive` / `both`). |
+| `detect-offload` | boolean | `false` | [Offload expiration detection](ch-10-00-bfd.md#offloading-expiration-detection-detect-offload) to the in-kernel (XDP) watchdog — **single-hop only** (inert on multihop). |
 
 Control-packet intervals use the BFD defaults (300 ms / ×3 ⇒ ~900 ms
 detection) and are not currently tunable — see
@@ -54,8 +55,9 @@ keys multi-hop off the `ebgp-multihop` setting; the two agree on the
 common directly-connected eBGP and iBGP cases.) On a point-to-point
 link the distinction is moot — the session is single-hop either way.
 
-zebra-rs does not yet have an `ebgp-multihop` knob, so **eBGP over
-loopbacks** needs the hop mode forced explicitly:
+zebra-rs does have an `ebgp-multihop` transport knob (for the BGP TCP
+session's TTL), but the BFD hop-mode inference does not read it — so
+**eBGP over loopbacks** still needs the BFD hop mode forced explicitly:
 
 ```
 router bgp {
@@ -86,7 +88,8 @@ but Echo is **single-hop only** (RFC 5883 multihop has no Echo), so it applies
 an iBGP or multihop-eBGP neighbour the `echo-mode` leaf is accepted but inert.
 Within that constraint it works like the OSPF/IS-IS form — `transmit` originates,
 `receive` advertises + reflects, `both` does both, via the per-interface
-`xdp-bfd-echo` helper:
+`xdp-bfd-echo` helper. IPv4 and IPv6 neighbours are covered alike (the Echo
+session uses the same addresses as the control session):
 
 ```
 router bgp {
@@ -101,6 +104,34 @@ router bgp {
   }
 }
 ```
+
+## Offloading expiration detection
+
+`detect-offload true` moves the RFC 5880 §6.8.4 detection timer into the
+kernel via the per-interface `xdp-bfd-echo` helper — **single-hop
+neighbours only** (the helper attaches per interface; on iBGP / multihop
+eBGP the leaf is accepted but inert, like `echo-mode`). See
+[the overview](ch-10-00-bfd.md#offloading-expiration-detection-detect-offload)
+for the mechanism and guard-rails.
+
+```
+router bgp {
+  neighbor 10.0.0.2 {        // directly-connected eBGP
+    remote-as 65002;
+    bfd {
+      enable true;
+      detect-offload true;   // expiration detection in kernel/XDP
+    }
+  }
+}
+```
+
+To place the helper, a single-hop session is keyed by the **connected
+interface** the neighbour lives on (resolved from the interface
+addresses the RIB reports). If BFD is enabled before that address is
+known, the session starts un-keyed (helper-backed features off) and is
+re-keyed automatically the moment the covering address is learned — the
+same keying also lets the Echo helper attach for BGP neighbours.
 
 ## Instance-level defaults
 

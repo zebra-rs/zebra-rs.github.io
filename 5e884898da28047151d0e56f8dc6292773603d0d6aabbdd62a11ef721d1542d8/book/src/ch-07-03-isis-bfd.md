@@ -35,13 +35,39 @@ interface, overridden per interface (see
 | `echo-mode` | `transmit` \| `receive` \| `both` | _(off)_ | Enable the [BFD Echo function](ch-10-00-bfd.md#echo-function) on this interface's single-hop adjacencies (IPv4 or IPv6). |
 | `echo-transmit-interval` | uint (ms) | `50` | Rate we originate Echo at (`transmit` / `both`). |
 | `echo-receive-interval` | uint (ms) | `50` | Advertised Required Min Echo RX (`receive` / `both`). |
+| `detect-offload` | boolean | `false` | [Offload expiration detection](ch-10-00-bfd.md#offloading-expiration-detection-detect-offload) to the in-kernel (XDP) watchdog once the session is Up. |
 
 Control-packet intervals use the BFD defaults (300 ms / ×3 ⇒ ~900 ms
 detection) and are not currently tunable — see
 [Tuning intervals](ch-10-00-bfd.md#tuning-intervals) in the overview.
 
 A session is subscribed when the adjacency comes **Up** and
-unsubscribed when it goes down.
+unsubscribed when it goes down. Both IPv4 and IPv6 adjacencies are
+covered: an IPv6(-only) adjacency runs its session over the two ends'
+link-local addresses.
+
+## Hold-down while BFD is Down
+
+Tearing the adjacency down on a BFD `Down` is only half of RFC 5882;
+the other half (§3.2) is **not letting it come straight back up**. IIHs
+keep arriving from a neighbour whose forwarding path is broken — without
+a gate, the adjacency would re-form on the next Hello, BGP/SPF would
+re-converge onto the dead path, BFD would kill it again, and the link
+would flap on the Hello period.
+
+zebra-rs therefore pins a neighbour whose BFD session is `Down` at the
+**Init** state: the IIH exchange proceeds, but the final transition to
+`Up` is held until the BFD session recovers. The pin is set when BFD
+reports the session `Down` (alongside the adjacency teardown), and
+lifted the moment BFD reports it `Up` again — the next received IIH
+then promotes the neighbour normally. It applies per neighbour and
+level, and only while `bfd enable` is in effect for the interface.
+
+> To make this work, the BFD session deliberately stays subscribed
+> across the teardown — it keeps probing while the adjacency is down,
+> precisely so it can observe the recovery and lift the pin. The
+> session is released only when the neighbour ages out for good or BFD
+> is unconfigured.
 
 ## Echo
 
@@ -61,6 +87,29 @@ router isis {
       echo-mode both;
       echo-transmit-interval 50;
       echo-receive-interval 50;
+    }
+  }
+}
+```
+
+## Offloading expiration detection
+
+`detect-offload true` moves the RFC 5880 §6.8.4 detection timer into the
+kernel via the same per-interface `xdp-bfd-echo` helper that backs Echo:
+the XDP program re-arms a per-session timer on every arriving control
+packet and the expiry fires in softirq, immune to daemon scheduling
+latency. The adjacency teardown on expiry — and the
+[hold-down](#hold-down-while-bfd-is-down) that follows — work exactly as
+with userspace detection. See
+[the overview](ch-10-00-bfd.md#offloading-expiration-detection-detect-offload)
+for the mechanism and guard-rails.
+
+```
+router isis {
+  interface eth0 {
+    bfd {
+      enable true;
+      detect-offload true;   // expiration detection in kernel/XDP
     }
   }
 }

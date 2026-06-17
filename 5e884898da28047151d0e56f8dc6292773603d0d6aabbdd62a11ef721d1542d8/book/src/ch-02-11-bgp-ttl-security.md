@@ -43,7 +43,7 @@ router:
   bgp:
     global:
       as: 65001
-      identifier: 10.0.0.1
+      router-id: 10.0.0.1
     neighbor:
     - remote-address: 10.0.0.2
       remote-as: 65002
@@ -126,7 +126,7 @@ router:
   bgp:
     global:
       as: 65001
-      identifier: 192.168.0.1
+      router-id: 192.168.0.1
     neighbor:
     - remote-address: 192.168.0.2
       remote-as: 65002
@@ -134,17 +134,23 @@ router:
       afi-safi:
       - name: ipv4
         enabled: true
-      ttl-security: null
+      ttl-security: {}
 ```
 
-`ttl-security: null` is the YAML spelling of a `type empty` leaf — the
-key is present with no value, which the loader turns into
-`set router bgp neighbor 192.168.0.2 ttl-security`. The FRR / IOS-style
-CLI form is the same path:
+`ttl-security: {}` is the YAML spelling of a presence container — the
+key is present with no children, which the loader turns into
+`set router bgp neighbor 192.168.0.2 ttl-security` (the legacy
+`ttl-security: null` spelling still loads the same way). The FRR /
+IOS-style CLI form is the same path:
 
 ```
 set router bgp neighbor 192.168.0.2 ttl-security
 ```
+
+Both `ttl-security` and `ebgp-multihop` can also be set on a
+[neighbor-group](ch-02-26-bgp-neighbor-group.md) and inherited by every
+member; a statement on the neighbor itself wins. A group change bounces
+every live member session, exactly like the per-neighbor command.
 
 Toggling either `ttl-security` or `ebgp-multihop` on a session that is
 already up bounces it (the same teardown `clear bgp <peer>` performs),

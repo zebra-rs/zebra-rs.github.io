@@ -71,7 +71,7 @@ router:
   bgp:
     global:
       as: 65001
-      identifier: 192.168.1.3
+      router-id: 192.168.1.3
     neighbor:
     - remote-address: 192.168.1.2
       remote-as: 65002
@@ -79,11 +79,13 @@ router:
       afi-safi:
       - name: ipv4
         enabled: true
-      allowas-in:            # bare presence container → default count 3
+      allowas-in: {}         # bare presence container → default count 3
 ```
 
-`allowas-in:` with no value is the YAML spelling of a presence container;
-the loader turns it into `set router bgp neighbor 192.168.1.2 allowas-in`.
+`allowas-in: {}` is the YAML spelling of a childless presence container;
+the loader turns it into `set router bgp neighbor 192.168.1.2 allowas-in`
+(the legacy `allowas-in: null` / bare `allowas-in:` spellings still load
+the same way).
 To set an explicit budget, nest `count`; for origin-only mode, nest the
 `origin` flag:
 
@@ -122,6 +124,10 @@ clear bgp ipv4 neighbor 192.168.1.2
 
 This is the key operational difference from an ordinary inbound policy
 change, which re-evaluates the routes already held in the Adj-RIB-In.
+
+Like the other per-neighbor knobs, `allowas-in` can also be set on a
+[neighbor-group](ch-02-26-bgp-neighbor-group.md) and inherited by
+every member; a statement on the neighbor itself wins.
 
 ## Verification
 

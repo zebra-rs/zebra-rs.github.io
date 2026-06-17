@@ -14,15 +14,22 @@
 ## Routing Protocols
 
 - [BGP](ch-02-00-what-is-bgp.md)
+  - [Neighbor Groups](ch-02-26-bgp-neighbor-group.md)
   - [Dynamic Neighbors](ch-02-01-dynamic-neighbors.md)
+  - [IPv6 Unnumbered (interface-neighbor)](ch-02-27-bgp-unnumbered.md)
   - [Session Authentication (TCP MD5 / TCP-AO)](ch-02-02-tcp-authentication.md)
   - [TTL: eBGP Multihop & Security (GTSM)](ch-02-11-bgp-ttl-security.md)
   - [TCP MSS](ch-02-14-bgp-tcp-mss.md)
+  - [TCP Port (listen & per-neighbor)](ch-02-23-bgp-port.md)
   - [AS Override](ch-02-12-bgp-as-override.md)
+  - [Local AS (AS Migration)](ch-02-30-bgp-local-as.md)
   - [allowas-in (Inbound AS_PATH Loop Relaxation)](ch-02-13-bgp-allowas-in.md)
   - [Remove Private AS](ch-02-14-bgp-remove-private-as.md)
   - [Enforce First AS](ch-02-15-bgp-enforce-first-as.md)
+  - [Well-Known Communities](ch-02-24-bgp-well-known-communities.md)
+  - [Table-Map (Policy at the BGP→RIB Install Point)](ch-02-28-bgp-table-map.md)
   - [disable-connected-check](ch-02-16-bgp-disable-connected-check.md)
+  - [ip-transparent (non-local update-source)](ch-02-29-bgp-ip-transparent.md)
   - [SRv6 Encapsulation Type (per-neighbor)](ch-02-17-bgp-srv6-encapsulation-type.md)
   - [Timer Configuration](ch-02-03-bgp-timers.md)
   - [L3VPN and Per-VRF Labels](ch-02-04-bgp-l3vpn.md)
@@ -36,6 +43,8 @@
     - [Option AB (hybrid)](ch-02-22-bgp-interas-option-ab.md)
   - [BFD](ch-02-08-bgp-bfd.md)
   - [Route Reflector](ch-02-09-bgp-route-reflector.md)
+  - [RIB Sharding (Parallel Route Processing)](ch-02-31-bgp-rib-sharding.md)
+  - [Clearing BGP Sessions](ch-02-25-bgp-clear.md)
   - [Conditional Tracing](ch-02-10-bgp-tracing.md)
 - [IS-IS](ch-07-00-isis.md)
   - [Timer Configuration](ch-07-01-isis-timers.md)
@@ -53,6 +62,11 @@
 ## Failure Detection
 
 - [Bidirectional Forwarding Detection (BFD)](ch-10-00-bfd.md)
+  - [The XDP/eBPF Data-Plane Helper](ch-10-01-bfd-xdp-helper.md)
+
+## Fast Reroute
+
+- [Fast Failover: TI-LFA + BFD (NexthopProtect)](ch-12-00-nexthop-protect.md)
 
 ## Performance Measurement
 

@@ -82,7 +82,7 @@ router:
   bgp:
     global:
       as: 65000
-      identifier: 1.1.1.3
+      router-id: 1.1.1.3
     neighbor:
     - remote-address: 172.16.0.2   # ASBR2, over the inter-AS link
       remote-as: 65001
@@ -258,7 +258,7 @@ customer prefix appears under the remote PE's RD, tagged with the shared
 route-target, and the multihop session is up:
 
 ```
-$ show ip bgp vpnv4
+$ show bgp vpnv4
 Route Distinguisher: 65001:1
  *>  10.2.0.0/30        2.2.2.1   ...   # rt:65000:100
 
