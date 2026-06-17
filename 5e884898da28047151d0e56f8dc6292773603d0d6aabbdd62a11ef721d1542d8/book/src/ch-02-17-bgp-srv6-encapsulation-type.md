@@ -55,7 +55,7 @@ router:
   bgp:
     global:
       as: 65001
-      identifier: 10.255.0.1
+      router-id: 10.255.0.1
     neighbor:
     - remote-address: 2001:db8::8
       remote-as: 65002
@@ -116,7 +116,7 @@ router:
     segment-routing:
       srv6:
         locator: LOC1
-        ipv6-unicast: null    # presence: originate an End.DT6 SID
+        ipv6-unicast: {}    # presence: originate an End.DT6 SID
 ```
 
 ```

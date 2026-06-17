@@ -22,11 +22,11 @@ Use it to force a clean re-synchronisation after a suspected
 database or SPF anomaly without restarting the daemon.
 
 The argument is the neighbor's **Router-ID** — the value shown in the
-`Neighbor ID` column of `show ip ospf neighbor` — *not* the neighbor's
+`Neighbor ID` column of `show ospf neighbor` — *not* the neighbor's
 interface address:
 
 ```
-zebra# show ip ospf neighbor
+zebra# show ospf neighbor
 Neighbor ID     Pri State      Up Time   Dead Time Address       Interface ...
 10.0.0.2         64 Full/  -   2m13s     38s       10.0.12.2     eth1 ...
 
@@ -41,7 +41,7 @@ clear ospf neighbor          # reset all OSPFv2 adjacencies
 ```
 
 The OSPFv3 commands behave identically; for OSPFv3 the Router-ID is the
-neighbor identity shown by `show ipv6 ospf neighbor` (RFC 5340 §10
+neighbor identity shown by `show ospfv3 neighbor` (RFC 5340 §10
 keys neighbors by Router-ID rather than by interface address).
 
 What a clear triggers, as a side effect of the adjacency dropping and

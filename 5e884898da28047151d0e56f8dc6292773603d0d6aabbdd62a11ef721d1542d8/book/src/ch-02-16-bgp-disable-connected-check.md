@@ -76,7 +76,7 @@ router:
   bgp:
     global:
       as: 65001
-      identifier: 10.255.0.1
+      router-id: 10.255.0.1
     neighbor:
     - remote-address: 10.255.0.2
       remote-as: 65002
@@ -85,25 +85,35 @@ router:
       - name: ipv4
         enabled: true
       update-source: 10.255.0.1
-      disable-connected-check: null
+      disable-connected-check: {}
 ```
 
-`disable-connected-check: null` is the YAML spelling of a `type empty`
-leaf — the key is present with no value, which the loader turns into
-`set router bgp neighbor 10.255.0.2 disable-connected-check`. The
-FRR / IOS-style CLI form is the same path:
+`disable-connected-check: {}` is the YAML spelling of a presence
+container — the key is present with no children, which the loader turns
+into `set router bgp neighbor 10.255.0.2 disable-connected-check` (the
+legacy `disable-connected-check: null` spelling still loads the same
+way). The FRR / IOS-style CLI form is the same path:
 
 ```
 set router bgp neighbor 10.255.0.2 disable-connected-check
 ```
 
 `update-source` is normally configured alongside it so the session sources
-from the loopback the neighbor expects.
+from the loopback the neighbor expects. If that source is an address the
+host does not even own (container peering, a VRRP VIP), you additionally
+need [`ip-transparent`](ch-02-29-bgp-ip-transparent.md) — the two knobs
+solve complementary halves: this one lifts the *neighbor-side* connected
+check, ip-transparent lifts the kernel's *local-side* non-local-bind
+check.
 
 Toggling `disable-connected-check` on a session that is already up bounces
 it (the same teardown `clear bgp <peer>` performs): enabling it lets a held
 neighbor connect, and disabling it resets a session that only came up
 because of the override.
+
+Like the other per-neighbor knobs, `disable-connected-check` can also be
+set on a [neighbor-group](ch-02-26-bgp-neighbor-group.md) and inherited
+by every member; a statement on the neighbor itself wins.
 
 ## Verification
 

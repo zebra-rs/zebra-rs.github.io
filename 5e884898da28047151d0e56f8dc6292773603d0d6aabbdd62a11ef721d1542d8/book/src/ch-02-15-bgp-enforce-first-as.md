@@ -62,7 +62,7 @@ router:
   bgp:
     global:
       as: 65002
-      identifier: 192.168.0.2
+      router-id: 192.168.0.2
     neighbor:
     - remote-address: 192.168.0.1
       remote-as: 65001
@@ -70,11 +70,11 @@ router:
       afi-safi:
       - name: ipv4
         enabled: true
-      enforce-first-as: null
+      enforce-first-as: {}
 ```
 
-`enforce-first-as: null` is the YAML spelling of a presence container —
-the key is present with no value, which the loader turns into
+`enforce-first-as: {}` is the YAML spelling of a presence container —
+the key is present with no children, which the loader turns into
 `set router bgp neighbor 192.168.0.1 enforce-first-as`. The FRR / IOS-style
 CLI form is the same path:
 
@@ -89,6 +89,10 @@ session so the routes are re-received and re-checked under the new policy:
 ```
 clear bgp ipv4 neighbor 192.168.0.1
 ```
+
+Like the other per-neighbor knobs, `enforce-first-as` can also be set on
+a [neighbor-group](ch-02-26-bgp-neighbor-group.md) and inherited by
+every member; a statement on the neighbor itself wins.
 
 ## Verification
 

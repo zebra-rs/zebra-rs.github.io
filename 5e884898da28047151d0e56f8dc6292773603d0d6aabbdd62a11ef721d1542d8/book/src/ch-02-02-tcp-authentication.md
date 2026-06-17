@@ -106,10 +106,10 @@ router:
   bgp:
     global:
       as: 65001
-      identifier: 192.168.0.1
+      router-id: 192.168.0.1
     neighbor:
     - remote-address: 192.168.0.2
-      peer-as: 65002
+      remote-as: 65002
       enabled: true
       afi-safi:
       - name: ipv4
@@ -122,6 +122,12 @@ router:
 `encoding` is `clear` (cleartext) or `encrypted` (zebra-rs
 obfuscated form). Maximum password length is 80 bytes, matching the
 kernel's `TCP_MD5SIG_MAXKEYLEN`.
+
+Like the other per-neighbor transport knobs, `password` can also be set
+on a [neighbor-group](ch-02-26-bgp-neighbor-group.md) and inherited by
+every member; a statement on the neighbor itself wins. A group password
+re-keys each member's listener entry; sessions already established keep
+their key until they reconnect.
 
 ### TCP-AO
 
@@ -145,10 +151,10 @@ router:
   bgp:
     global:
       as: 65001
-      identifier: 192.168.0.1
+      router-id: 192.168.0.1
     neighbor:
     - remote-address: 192.168.0.2
-      peer-as: 65002
+      remote-as: 65002
       enabled: true
       afi-safi:
       - name: ipv4

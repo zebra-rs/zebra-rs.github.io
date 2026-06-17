@@ -68,7 +68,7 @@ router:
   bgp:
     global:
       as: 65002
-      identifier: 192.168.0.2
+      router-id: 192.168.0.2
     neighbor:
     - remote-address: 192.168.1.3
       remote-as: 65001
@@ -76,11 +76,11 @@ router:
       afi-safi:
       - name: ipv4
         enabled: true
-      as-override: null
+      as-override: {}
 ```
 
-`as-override: null` is the YAML spelling of a presence container — the
-key is present with no value, which the loader turns into
+`as-override: {}` is the YAML spelling of a presence container — the
+key is present with no children, which the loader turns into
 `set router bgp neighbor 192.168.1.3 as-override`. The FRR / IOS-style
 CLI form is the same path:
 
@@ -95,6 +95,10 @@ session so the provider re-advertises with the new AS_PATH:
 ```
 clear bgp ipv4 neighbor 192.168.1.3
 ```
+
+Like the other per-neighbor knobs, `as-override` can also be set on a
+[neighbor-group](ch-02-26-bgp-neighbor-group.md) and inherited by
+every member; a statement on the neighbor itself wins.
 
 ## Verification
 

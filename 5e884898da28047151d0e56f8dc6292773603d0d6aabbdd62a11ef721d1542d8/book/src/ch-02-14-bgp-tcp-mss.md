@@ -19,7 +19,7 @@ router:
   bgp:
     global:
       as: 65001
-      identifier: 192.168.0.1
+      router-id: 192.168.0.1
     neighbor:
     - remote-address: 192.168.0.2
       remote-as: 65002
@@ -35,6 +35,12 @@ The FRR / IOS-style CLI form is the same path:
 ```
 set router bgp neighbor 192.168.0.2 tcp-mss 500
 ```
+
+Like the other per-neighbor transport knobs, `tcp-mss` can also be set
+on a [neighbor-group](ch-02-26-bgp-neighbor-group.md) and inherited by
+every member; a statement on the neighbor itself wins. The listener
+clamp is re-derived across all members when the group value changes;
+live sessions pick the new clamp up at their next connect.
 
 ## How it is applied
 

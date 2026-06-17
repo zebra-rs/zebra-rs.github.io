@@ -93,7 +93,7 @@ router:
   bgp:
     global:
       as: 100
-      identifier: 192.168.0.2
+      router-id: 192.168.0.2
     neighbor:
     - remote-address: 192.168.1.3
       remote-as: 200
@@ -136,6 +136,10 @@ the session so the provider re-advertises with the stripped AS_PATH:
 ```
 clear bgp ipv4 neighbor 192.168.1.3
 ```
+
+Like the other per-neighbor knobs, `remove-private-as` can also be set
+on a [neighbor-group](ch-02-26-bgp-neighbor-group.md) and inherited by
+every member; a statement on the neighbor itself wins.
 
 ## Verification
 
