@@ -72,7 +72,7 @@ function Header({ mono, onToggleTheme, dark }) {
 /* ─────────────────────────── Install strip ─────────────────────────── */
 function InstallStrip() {
   const [copied, setCopied] = useState(false);
-  const cmd = "cargo install zebra-rs@latest";
+  const cmd = "curl -fsSL https://zebra.rs/install.sh | bash";
   return (
     <div id="install" className="mono" style={{
       display: "inline-flex", alignItems: "stretch", gap: 0,
