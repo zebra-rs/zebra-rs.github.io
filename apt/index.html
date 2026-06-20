@@ -37,21 +37,21 @@
 </table>
 
 <h2>Install (stable channel)</h2>
-<div class="note">
-  Stable packages are published with each tagged release. Until the first stable
-  release is published, only the <a href="#nightly">nightly channel</a> is populated —
-  use that for now.
-</div>
+<p>Recommended for most users — published with each tagged release.</p>
 <pre><code># 1. Trust the zebra-rs archive key (scoped to this repo only)
 sudo install -d -m 0755 /etc/apt/keyrings
 curl -fsSL https://zebra.rs/apt/zebra-rs-archive-keyring.asc \
-  | sudo gpg --dearmor -o /etc/apt/keyrings/zebra-rs.gpg
+  | sudo gpg --dearmor --yes -o /etc/apt/keyrings/zebra-rs.gpg
 
 # 2. Add the repo for this machine's Ubuntu release
 . /etc/os-release
-echo "deb [signed-by=/etc/apt/keyrings/zebra-rs.gpg] \
-https://github.com/zebra-rs/zebra-rs/releases/download/apt-${VERSION_CODENAME} ./" \
-  | sudo tee /etc/apt/sources.list.d/zebra-rs.list
+base=https://github.com/zebra-rs/zebra-rs/releases/download
+sudo tee /etc/apt/sources.list.d/zebra-rs.sources &gt;/dev/null &lt;&lt;EOF
+Types: deb
+URIs: $base/apt-$VERSION_CODENAME
+Suites: ./
+Signed-By: /etc/apt/keyrings/zebra-rs.gpg
+EOF
 
 # 3. Install
 sudo apt-get update
@@ -62,12 +62,16 @@ sudo apt-get install -y zebra-rs</code></pre>
 <code>nightly-</code> tag prefix:</p>
 <pre><code>sudo install -d -m 0755 /etc/apt/keyrings
 curl -fsSL https://zebra.rs/apt/zebra-rs-archive-keyring.asc \
-  | sudo gpg --dearmor -o /etc/apt/keyrings/zebra-rs.gpg
+  | sudo gpg --dearmor --yes -o /etc/apt/keyrings/zebra-rs.gpg
 
 . /etc/os-release
-echo "deb [signed-by=/etc/apt/keyrings/zebra-rs.gpg] \
-https://github.com/zebra-rs/zebra-rs/releases/download/nightly-${VERSION_CODENAME} ./" \
-  | sudo tee /etc/apt/sources.list.d/zebra-rs-nightly.list
+base=https://github.com/zebra-rs/zebra-rs/releases/download
+sudo tee /etc/apt/sources.list.d/zebra-rs-nightly.sources &gt;/dev/null &lt;&lt;EOF
+Types: deb
+URIs: $base/nightly-$VERSION_CODENAME
+Suites: ./
+Signed-By: /etc/apt/keyrings/zebra-rs.gpg
+EOF
 
 sudo apt-get update
 sudo apt-get install -y zebra-rs</code></pre>
@@ -78,8 +82,8 @@ systemctl status zebra-rs</code></pre>
 
 <h2>Uninstall</h2>
 <pre><code>sudo apt-get remove -y zebra-rs
-sudo rm -f /etc/apt/sources.list.d/zebra-rs.list \
-           /etc/apt/sources.list.d/zebra-rs-nightly.list \
+sudo rm -f /etc/apt/sources.list.d/zebra-rs.sources \
+           /etc/apt/sources.list.d/zebra-rs-nightly.sources \
            /etc/apt/keyrings/zebra-rs.gpg
 sudo apt-get update</code></pre>
 
