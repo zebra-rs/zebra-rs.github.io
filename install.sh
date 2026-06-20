@@ -10,7 +10,7 @@
 # POSIX sh, no gpg required (apt reads the armored key directly). No interactive prompts.
 set -eu
 
-REPO_BASE="https://github.com/zebra-rs/zebra-rs/releases/download"
+REPO_BASE="https://github.com/zebra-rs/zebra-rs.github.io/releases/download"
 KEY_URL="https://zebra.rs/apt/zebra-rs-archive-keyring.asc"
 KEYRING="/etc/apt/keyrings/zebra-rs.asc"
 SOURCES="/etc/apt/sources.list.d/zebra-rs.sources"

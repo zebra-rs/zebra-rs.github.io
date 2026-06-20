@@ -45,7 +45,7 @@ curl -fsSL https://zebra.rs/apt/zebra-rs-archive-keyring.asc \
 
 # 2. Add the repo for this machine's Ubuntu release
 . /etc/os-release
-base=https://github.com/zebra-rs/zebra-rs/releases/download
+base=https://github.com/zebra-rs/zebra-rs.github.io/releases/download
 sudo tee /etc/apt/sources.list.d/zebra-rs.sources &gt;/dev/null &lt;&lt;EOF
 Types: deb
 URIs: $base/apt-$VERSION_CODENAME
@@ -65,7 +65,7 @@ curl -fsSL https://zebra.rs/apt/zebra-rs-archive-keyring.asc \
   | sudo gpg --dearmor --yes -o /etc/apt/keyrings/zebra-rs.gpg
 
 . /etc/os-release
-base=https://github.com/zebra-rs/zebra-rs/releases/download
+base=https://github.com/zebra-rs/zebra-rs.github.io/releases/download
 sudo tee /etc/apt/sources.list.d/zebra-rs-nightly.sources &gt;/dev/null &lt;&lt;EOF
 Types: deb
 URIs: $base/nightly-$VERSION_CODENAME
