@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>zebra-rs APT repository</title>
+<link rel="icon" href="../favicon.ico">
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+         line-height: 1.55; max-width: 820px; margin: 2.5rem auto; padding: 0 1.1rem; }
+  h1 { margin-bottom: .2rem; }
+  .sub { color: #888; margin-top: 0; }
+  h2 { margin-top: 2.2rem; border-bottom: 1px solid #8884; padding-bottom: .25rem; }
+  pre { background: #1115; padding: .9rem 1rem; border-radius: 8px; overflow-x: auto;
+        font-size: .92rem; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  table { border-collapse: collapse; margin: 1rem 0; }
+  th, td { border: 1px solid #8884; padding: .35rem .7rem; text-align: left; }
+  .note { background: #f6c34322; border-left: 4px solid #f6c343; padding: .7rem 1rem;
+          border-radius: 4px; margin: 1rem 0; }
+  a { color: #2a7ae2; }
+  footer { margin-top: 3rem; color: #888; font-size: .9rem; }
+</style>
+</head>
+<body>
+
+<h1>zebra-rs APT repository</h1>
+<p class="sub">Install and auto-update zebra-rs on Ubuntu via <code>apt</code>.</p>
+
+<h2>Supported releases</h2>
+<table>
+  <tr><th>Ubuntu</th><th>Codename</th><th>amd64</th><th>arm64</th></tr>
+  <tr><td>22.04 LTS</td><td>jammy</td><td>✓</td><td>✓</td></tr>
+  <tr><td>24.04 LTS</td><td>noble</td><td>✓</td><td>✓</td></tr>
+  <tr><td>26.04</td><td>resolute</td><td>✓</td><td>✓</td></tr>
+</table>
+
+<h2>Install (stable channel)</h2>
+<div class="note">
+  Stable packages are published with each tagged release. Until the first stable
+  release is published, only the <a href="#nightly">nightly channel</a> is populated —
+  use that for now.
+</div>
+<pre><code># 1. Trust the zebra-rs archive key (scoped to this repo only)
+sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://zebra.rs/apt/zebra-rs-archive-keyring.asc \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/zebra-rs.gpg
+
+# 2. Add the repo for this machine's Ubuntu release
+. /etc/os-release
+echo "deb [signed-by=/etc/apt/keyrings/zebra-rs.gpg] \
+https://github.com/zebra-rs/zebra-rs/releases/download/apt-${VERSION_CODENAME} ./" \
+  | sudo tee /etc/apt/sources.list.d/zebra-rs.list
+
+# 3. Install
+sudo apt-get update
+sudo apt-get install -y zebra-rs</code></pre>
+
+<h2 id="nightly">Install (nightly channel)</h2>
+<p>Bleeding-edge builds, refreshed every night. Same as above but with the
+<code>nightly-</code> tag prefix:</p>
+<pre><code>sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://zebra.rs/apt/zebra-rs-archive-keyring.asc \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/zebra-rs.gpg
+
+. /etc/os-release
+echo "deb [signed-by=/etc/apt/keyrings/zebra-rs.gpg] \
+https://github.com/zebra-rs/zebra-rs/releases/download/nightly-${VERSION_CODENAME} ./" \
+  | sudo tee /etc/apt/sources.list.d/zebra-rs-nightly.list
+
+sudo apt-get update
+sudo apt-get install -y zebra-rs</code></pre>
+
+<h2>Verify</h2>
+<pre><code>apt-cache policy zebra-rs     # candidate points at the github.com release URL
+systemctl status zebra-rs</code></pre>
+
+<h2>Uninstall</h2>
+<pre><code>sudo apt-get remove -y zebra-rs
+sudo rm -f /etc/apt/sources.list.d/zebra-rs.list \
+           /etc/apt/sources.list.d/zebra-rs-nightly.list \
+           /etc/apt/keyrings/zebra-rs.gpg
+sudo apt-get update</code></pre>
+
+<footer>
+  Not on a supported Ubuntu release? Grab a <code>.deb</code> directly from the
+  <a href="https://github.com/zebra-rs/zebra-rs/releases">GitHub releases</a> page.
+</footer>
+
+</body>
+</html>
