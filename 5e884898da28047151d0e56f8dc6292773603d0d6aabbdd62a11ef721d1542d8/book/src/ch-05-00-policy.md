@@ -3,10 +3,11 @@
 A *policy* in zebra-rs is the equivalent of what Cisco / Juniper /
 FRR call a *route-map* or *route-policy*. It is an ordered list of
 entries; each entry decides whether a route is accepted, rejected,
-or modified before being passed on. Policies are attached to BGP
-peers in either the `in` direction (applied to routes received from
-the peer) or the `out` direction (applied to routes advertised to
-the peer).
+or modified before being passed on. A policy is attached to a BGP
+peer per address-family — under `neighbor X afi-safi <family>
+policy` — in either the `in` direction (applied to routes received
+from the peer) or the `out` direction (applied to routes advertised
+to the peer).
 
 A policy is built out of three pieces:
 
@@ -22,7 +23,7 @@ Most policy clauses reference a *set* — a separately-named
 collection of values. The defined set types are:
 
 - `prefix-set` — IP prefixes, optionally with `le`/`ge` length
-  bounds. Used by `match prefix`.
+  bounds. Used by `match prefix-set`.
 - `community-set` — standard or extended community values, with
   optional regex. Used by `match community`.
 - `ext-community-set` — extended communities only (`rt:`/`soo:`),
@@ -52,7 +53,7 @@ policy IN-CUSTOMER-A {
     entry 10 {
         action permit;
         match {
-            prefix CUSTOMER-A;
+            prefix-set CUSTOMER-A;
         }
         set {
             local-preference {
@@ -68,8 +69,10 @@ policy IN-CUSTOMER-A {
 
 router bgp {
     neighbor 192.168.0.1 {
-        policy {
-            in IN-CUSTOMER-A;
+        afi-safi ipv4 {
+            policy {
+                in IN-CUSTOMER-A;
+            }
         }
     }
 }
