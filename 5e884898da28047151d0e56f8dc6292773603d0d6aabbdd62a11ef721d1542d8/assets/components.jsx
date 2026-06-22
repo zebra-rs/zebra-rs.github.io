@@ -47,7 +47,7 @@ function Header({ mono, onToggleTheme, dark }) {
           <ZebraLogo size={34} mono={mono} intro />
           <span className="brand-word" style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
           <span className="pill mono brand-pill">
-            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.6.1
+            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.6.2
           </span>
         </a>
         <nav className="site-nav">
