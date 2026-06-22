@@ -4,6 +4,9 @@
 - [Separation of Reachability Information and Forwarding Decision](ch-00-01-reachability-information.md)
 - [Router ID Selection](ch-00-02-router-id.md)
 - [Interface Configuration](ch-00-03-interface-configuration.md)
+- [VXLAN Configuration](ch-00-04-vxlan-configuration.md)
+- [Bridge Configuration](ch-00-05-bridge-configuration.md)
+- [Command Line Options](ch-00-06-command-line-options.md)
 
 ## Static Route
 
@@ -35,6 +38,10 @@
   - [L3VPN and Per-VRF Labels](ch-02-04-bgp-l3vpn.md)
   - [L3VPN over an SRv6 Underlay](ch-02-05-bgp-l3vpn-srv6.md)
   - [EVPN Type-5 (IP Prefix Routes)](ch-02-06-bgp-evpn-type5.md)
+  - [EVPN IGMP/MLD Proxy (Selective Multicast)](ch-02-32-bgp-evpn-igmp-mld-proxy.md)
+  - [EVPN BUM & Assisted Replication](ch-02-33-bgp-evpn-assisted-replication.md)
+  - [EVPN BUM Tunnel Segmentation (RFC 9572)](ch-02-34-bgp-evpn-segmentation.md)
+  - [Mobile User Plane (MUP) & the MUP Controller](ch-02-35-bgp-mup.md)
   - [Route Target Constraint (RTC)](ch-02-07-bgp-rtc.md)
   - [Inter-AS L3VPN](ch-02-18-bgp-interas.md)
     - [Option A (back-to-back VRFs)](ch-02-20-bgp-interas-option-a.md)
@@ -54,6 +61,7 @@
   - [LSP MTU and Fragmentation](ch-07-05-isis-lsp-mtu.md)
   - [Route Redistribution](ch-07-06-isis-redistribution.md)
   - [Passive Interfaces](ch-07-07-isis-passive.md)
+  - [Egress Protection (Mirror SID)](ch-07-08-isis-egress-protection.md)
 - [OSPFv2](ch-08-00-ospf.md)
   - [Configuration](ch-08-01-ospf-configuration.md)
   - [BFD](ch-08-02-ospf-bfd.md)
@@ -82,6 +90,7 @@
   - [Control Flow](ch-05-01-policy-control-flow.md)
   - [Match](ch-05-02-policy-match.md)
   - [Set](ch-05-03-policy-set.md)
+  - [Lua Scripting](ch-05-04-lua-scripting.md)
 
 ## Management Interface
 
