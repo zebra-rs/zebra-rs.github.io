@@ -12,6 +12,68 @@ function flattenNav(sections) {
   return flat;
 }
 
+/* Build a nested tree from depth-ordered items (mdBook-style nesting) */
+function buildTree(items) {
+  const root = [];
+  const stack = [];
+  for (const it of items) {
+    const node = { ...it, children: [] };
+    while (stack.length && stack[stack.length - 1].depth >= it.depth) stack.pop();
+    if (stack.length) stack[stack.length - 1].node.children.push(node);
+    else root.push(node);
+    stack.push({ node, depth: it.depth });
+  }
+  return root;
+}
+
+/* Path of ids from a root node down to `id` (inclusive), or null */
+function findPath(nodes, id, path) {
+  path = path || [];
+  for (const n of nodes) {
+    const here = [...path, n.id];
+    if (n.id === id) return here;
+    if (n.children.length) {
+      const r = findPath(n.children, id, here);
+      if (r) return r;
+    }
+  }
+  return null;
+}
+
+/* Recursive sidebar node — foldable when it has children */
+function NavNode({ node, active, expanded, setExpanded, searching }) {
+  const hasKids = node.children.length > 0;
+  const isOpen = searching ? true : !!expanded[node.id];
+  return (
+    <div className="nav-node">
+      <div
+        className={`nav-row ${node.id === active ? "active" : ""}`}
+        style={{ paddingLeft: node.depth * 16 }}
+      >
+        {hasKids ? (
+          <button
+            className="nav-toggle"
+            aria-label={isOpen ? "collapse" : "expand"}
+            onClick={() => setExpanded(e => ({ ...e, [node.id]: !e[node.id] }))}
+          >
+            <svg className={isOpen ? "open" : ""} width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        ) : (
+          <span className="nav-toggle-spacer" />
+        )}
+        <a href={`#${node.id}`} className={node.id === active ? "active" : ""}>{node.title}</a>
+      </div>
+      {hasKids && isOpen && (
+        <div className="nav-children">
+          {node.children.map(c => (
+            <NavNode key={c.id} node={c} active={active} expanded={expanded} setExpanded={setExpanded} searching={searching} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DocsApp() {
   const DEFAULTS = /*EDITMODE-BEGIN*/{
     "accent": "#e38829",
@@ -28,6 +90,7 @@ function DocsApp() {
     return h || "ch-00-00-introduction";
   });
   const [tocActive, setTocActive] = useStateD("");
+  const [expanded, setExpanded] = useStateD({});
 
   useEffectD(() => { document.documentElement.classList.toggle("dark", dark); localStorage.setItem("z.dark", dark ? "1" : "0"); }, [dark]);
   useEffectD(() => { document.documentElement.style.setProperty("--accent", accent); localStorage.setItem("z.accent", accent); }, [accent]);
@@ -45,6 +108,22 @@ function DocsApp() {
 
   const sections = useMemoD(() => parseSummary(window.ZEBRA_DOCS.SUMMARY), []);
   const flat = useMemoD(() => flattenNav(sections), [sections]);
+
+  // Auto-expand the branch that contains the active page (fold.level = 0:
+  // everything else stays collapsed).
+  useEffectD(() => {
+    for (const s of sections) {
+      const path = findPath(buildTree(s.items), active);
+      if (path) {
+        setExpanded(e => {
+          const next = { ...e };
+          for (const id of path) next[id] = true;
+          return next;
+        });
+        break;
+      }
+    }
+  }, [active, sections]);
   const curIdx = flat.findIndex(e => e.id === active);
   const prev = curIdx > 0 ? flat[curIdx - 1] : null;
   const next = curIdx >= 0 && curIdx < flat.length - 1 ? flat[curIdx + 1] : null;
@@ -138,12 +217,15 @@ function DocsApp() {
           {filtered.map((s, si) => (
             <div key={si}>
               {s.title && <h5>{s.title}</h5>}
-              {s.items.map(it => (
-                <a
-                  key={it.id}
-                  href={`#${it.id}`}
-                  className={`d-${it.depth} ${it.id === active ? "active" : ""}`}
-                >{it.title}</a>
+              {buildTree(s.items).map(node => (
+                <NavNode
+                  key={node.id}
+                  node={node}
+                  active={active}
+                  expanded={expanded}
+                  setExpanded={setExpanded}
+                  searching={!!query.trim()}
+                />
               ))}
             </div>
           ))}
