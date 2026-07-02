@@ -36,6 +36,7 @@
   - [Timer Configuration](ch-02-03-bgp-timers.md)
   - [L3VPN and Per-VRF Labels](ch-02-04-bgp-l3vpn.md)
   - [L3VPN over an SRv6 Underlay](ch-02-05-bgp-l3vpn-srv6.md)
+  - [L3VPN PE-CE Routing Protocols](ch-02-36-bgp-l3vpn-pe-ce.md)
   - [EVPN Type-5 (IP Prefix Routes)](ch-02-06-bgp-evpn-type5.md)
   - [EVPN IGMP/MLD Proxy (Selective Multicast)](ch-02-32-bgp-evpn-igmp-mld-proxy.md)
   - [EVPN BUM & Assisted Replication](ch-02-33-bgp-evpn-assisted-replication.md)
@@ -96,6 +97,16 @@
 - [VTY Access and Authentication](ch-06-00-vty-access.md)
   - [Session Management Design](ch-06-01-session-design.md)
   - [Show Config Commands](ch-06-02-show-config-commands.md)
+
+## Operational Show Commands
+
+- [Overview](ch-14-00-show-overview.md)
+  - [System, RIB and Forwarding](ch-14-01-show-system-rib.md)
+  - [BGP](ch-14-02-show-bgp.md)
+  - [OSPFv2 and OSPFv3](ch-14-03-show-ospf.md)
+  - [IS-IS](ch-14-04-show-isis.md)
+  - [Neighbor Discovery, BFD and STAMP](ch-14-05-show-bfd-stamp-nd.md)
+  - [Policy Objects](ch-14-06-show-policy.md)
 
 ## AI Native
 
