@@ -29,7 +29,7 @@ function CmdBlock({ cmd }) {
 }
 
 function InstallApp() {
-  const [dark, setDark]     = useStateI(() => localStorage.getItem("z.dark") !== null ? localStorage.getItem("z.dark") === "1" : true);
+  const [dark, setDark]     = useStateI(() => localStorage.getItem("z.dark") !== null ? localStorage.getItem("z.dark") === "1" : false);
   const [accent, setAccent] = useStateI(() => localStorage.getItem("z.accent") || "#e38829");
   const [mono, setMono]     = useStateI(() => localStorage.getItem("z.mono") === "1");
 
@@ -111,6 +111,47 @@ Exec commands:
 ubuntu> show ip route`}</code></pre>
           <p>
             See the <a href="docs.html">configuration chapters</a> for how to drive it from there.
+          </p>
+
+          <h2 id="configure">Configure</h2>
+          <p>
+            Changing the running configuration means entering <em>configure mode</em>, which
+            requires the Admin role. There are three ways to obtain it:
+          </p>
+          <ol>
+            <li><strong>Run <code>vty</code> as root.</strong> The <code>root</code> user (uid 0) is Admin automatically, so <code>configure</code> enters configure mode with no prompt.</li>
+            <li><strong>Enter the root password.</strong> Any user can run <code>configure</code> and, when prompted, type the <strong>root</strong> password to elevate for the session.</li>
+            <li><strong>Join the <code>zebra-rs</code> group.</strong> Members of the <code>zebra-rs</code> group run <code>configure</code> (or <code>enable</code>) with no password at all.</li>
+          </ol>
+          <p>
+            The package installer creates the <code>zebra-rs</code> group. To let user
+            <code>kunihiro</code> configure without a password, add them to it:
+          </p>
+          <CmdBlock cmd="sudo usermod -aG zebra-rs kunihiro" />
+          <CmdBlock cmd="newgrp zebra-rs" />
+          <p>
+            <code>usermod</code> records the membership, but an existing login shell keeps the
+            groups it started with; <code>newgrp zebra-rs</code> (or logging out and back in)
+            picks up the new group in the current session. You might need to reboot the system
+            to reflect the <code>zebra-rs</code> group across every session.
+          </p>
+          <p>
+            Once you are a member, run <code>vty</code> and enter configure mode:
+          </p>
+          <pre className="code"><code>{`vty
+ubuntu>configure
+% Enabled (admin role active for 900 seconds)
+ubuntu#`}</code></pre>
+          <p>
+            The <code>% Enabled</code> line confirms the Admin role, which is held for 900
+            seconds of idle time — refreshed on each command — up to a four-hour hard cap. In
+            configure mode you can review the running configuration with <code>show</code>,
+            edit it with <code>set</code> and <code>delete</code>, and apply your changes with{" "}
+            <code>commit</code>.
+          </p>
+          <p>
+            See <a href="docs.html#ch-06-00-vty-access">VTY Access Control</a> for the full
+            role and authentication model.
           </p>
         </div>
       </main>

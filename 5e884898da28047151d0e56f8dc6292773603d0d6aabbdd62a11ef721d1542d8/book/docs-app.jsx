@@ -78,7 +78,7 @@ function DocsApp() {
   const DEFAULTS = /*EDITMODE-BEGIN*/{
     "accent": "#e38829",
     "mono": false,
-    "dark": true
+    "dark": false
   }/*EDITMODE-END*/;
 
   const [dark, setDark]     = useStateD(() => localStorage.getItem("z.dark") !== null ? localStorage.getItem("z.dark") === "1" : DEFAULTS.dark);

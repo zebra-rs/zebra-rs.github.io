@@ -7,7 +7,7 @@ function App() {
   const DEFAULTS = /*EDITMODE-BEGIN*/{
     "accent": "#e38829",
     "mono": false,
-    "dark": true,
+    "dark": false,
     "view": "A"
   }/*EDITMODE-END*/;
 
@@ -77,7 +77,7 @@ function App() {
         </div>
 
         <section id="news" style={{ paddingTop: 48 }}>
-          <SectionHead eyebrow="news" titleClass="news-title" title="2026/07/06 — First public release of zebra-rs" />
+          <SectionHead eyebrow="news" titleClass="news-title" title="2026/07/07 — First public release of zebra-rs" />
           <div className="card" style={{ maxWidth: 860 }}>
             <div className="mono" style={{ fontSize: 12.5, color: "var(--accent)", marginBottom: 12, letterSpacing: ".04em" }}>
               2026 / 07 / 06
@@ -91,10 +91,8 @@ function App() {
               <span style={{ color: "var(--fg)" }}>L3VPN</span>, and{" "}
               <span style={{ color: "var(--fg)" }}>EVPN</span>. Built on a memory-safe,
               fully asynchronous core, zebra-rs applies configuration idempotently and
-              exposes its entire routing state to AI agents through a native MCP server —
-              so operators can inspect adjacencies, diagnose sessions, and draft policy
-              in natural language. This first release lays the foundation for a modern,
-              open, and programmable control plane for the AI and container era.
+              exposes its entire routing state to AI agents. Install zebra-rs from{" "}
+              <a href="install.html" style={{ color: "var(--accent)" }}>here</a>.
             </p>
           </div>
         </section>
