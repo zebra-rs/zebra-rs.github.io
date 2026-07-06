@@ -15,8 +15,19 @@ function App() {
   const [accent, setAccent] = useStateApp(() => localStorage.getItem("z.accent") || DEFAULTS.accent);
   const [mono, setMono]     = useStateApp(() => localStorage.getItem("z.mono")   === "1" ? true : (localStorage.getItem("z.mono") === "0" ? false : DEFAULTS.mono));
   const [view, setView]     = useStateApp(() => localStorage.getItem("z.view")   || DEFAULTS.view);
+  const [autoPaused, setAutoPaused] = useStateApp(false);
   const [tweaksOpen, setTweaksOpen] = useStateApp(false);
   const [editMode, setEditMode] = useStateApp(false);
+
+  // auto-cycle A→B→C until the user picks a view manually
+  useEffectApp(() => {
+    if (autoPaused) return;
+    const id = setInterval(() => {
+      setView(v => (v === "A" ? "B" : v === "B" ? "C" : "A"));
+    }, 6000);
+    return () => clearInterval(id);
+  }, [autoPaused]);
+  const pickView = (v) => { setAutoPaused(true); setView(v); };
 
   useEffectApp(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -52,9 +63,9 @@ function App() {
     const onKey = (e) => {
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
       if (e.key === "t" || e.key === "T") setTweaksOpen(o => !o);
-      if (e.key === "1") setView("A");
-      if (e.key === "2") setView("B");
-      if (e.key === "3") setView("C");
+      if (e.key === "1") pickView("A");
+      if (e.key === "2") pickView("B");
+      if (e.key === "3") pickView("C");
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -70,9 +81,9 @@ function App() {
           <LeftHero />
           <div>
             {view === "A" && <TerminalPanel />}
-            {view === "B" && <RoutesPanel />}
+            {view === "B" && <IsisPanel />}
             {view === "C" && <TopologyPanel />}
-            <ViewSwitch view={view} setView={setView} />
+            <ViewSwitch view={view} setView={pickView} />
           </div>
         </div>
 
