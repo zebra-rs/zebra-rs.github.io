@@ -78,14 +78,23 @@ main() {
 
   ver=$(dpkg-query -W -f='${Version}' zebra-rs 2>/dev/null || echo '?')
   info "Installed zebra-rs ${ver}"
-  info "Status: systemctl status zebra-rs    Config: /etc/zebra-rs/"
+
+  printf '\n'
+  printf '%s\n' \
+         '     xx' \
+         '      ww' \
+         '     wWWWWWWW_/  zebra-rs installer' \
+         '     `WWWWWW'\''    https://zebra.rs' \
+         '      II  II' \
+         ''
 
   install_user="${SUDO_USER:-$(id -un)}"
   if [ "$install_user" != root ]; then
-    info "Configure mode without a root password:"
+
+    printf '  Configure mode without a root password:\n'
     printf '\n  $ sudo usermod -aG zebra-rs %s\n  $ newgrp zebra-rs\n\n' "$install_user"
-    printf 'After this you can run vty and enter configure to get into configure mode.\n'
-    printf 'You may still need to reboot for the zebra-rs group to apply to every session.\n\n'
+    printf '  After this you can run "vty" and enter "configure" to get into configure mode.\n'
+    printf '  You may still need to reboot for the zebra-rs group to apply to every session.\n\n'
   fi
 }
 
