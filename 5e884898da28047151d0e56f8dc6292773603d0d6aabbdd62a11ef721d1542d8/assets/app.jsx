@@ -82,7 +82,7 @@ function App() {
         </section>
 
         <section style={{ paddingTop: 72 }}>
-          <SectionHead eyebrow="protocols" title="Three ideas. One daemon." />
+          <SectionHead eyebrow="protocols" title="Standards, all the way down." />
           <ProtocolsRow />
         </section>
       </main>
@@ -116,10 +116,10 @@ function App() {
 function SectionHead({ eyebrow, title }) {
   return (
     <div style={{ marginBottom: 28 }}>
-      <div className="mono" style={{
+      {eyebrow && <div className="mono" style={{
         fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase",
         color: "var(--fg-muted)", marginBottom: 10,
-      }}>— {eyebrow}</div>
+      }}>— {eyebrow}</div>}
       <h2 style={{
         margin: 0, fontSize: "clamp(26px, 3vw, 36px)", fontWeight: 400,
         letterSpacing: -0.6, maxWidth: 760,

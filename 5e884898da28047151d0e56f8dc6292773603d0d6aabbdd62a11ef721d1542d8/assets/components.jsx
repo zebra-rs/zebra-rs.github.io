@@ -53,10 +53,9 @@ function Header({ mono, onToggleTheme, dark }) {
           </a>
         </div>
         <nav className="site-nav">
-          <a className="nav-link nav-link-secondary" href="#features" style={{ color: "var(--fg-soft)" }}>features</a>
           <a className="nav-link nav-link-secondary" href="#install" style={{ color: "var(--fg-soft)" }}>install</a>
-          <a className="nav-link" href="Docs.html" style={{ color: "var(--fg-soft)" }}>docs</a>
-          <a className="nav-link nav-link-secondary" href="#protocols" style={{ color: "var(--fg-soft)" }}>protocols</a>
+          <a className="nav-link" href="docs.html" style={{ color: "var(--fg-soft)" }}>docs</a>
+          <a className="nav-link nav-link-secondary" href="protocols.html" style={{ color: "var(--fg-soft)" }}>protocols</a>
           <a href="https://github.com/zebra-rs/zebra-rs" target="_blank" rel="noopener" style={{ color: "var(--fg-soft)", display: "inline-flex", gap: 6, alignItems: "center" }}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/></svg>
             github
@@ -104,13 +103,13 @@ const CFG_CLI = `router {
   bgp {
     global {
       as 65501;
-      identifier 10.0.0.1;
+      router-id 10.0.0.1;
     }
     neighbor 10.0.0.2 {
       afi-safi vpnv4 {
         enabled true;
       }
-      peer-as 65501;
+      remote-as 65501;
     }
   }
 }`;
@@ -119,20 +118,20 @@ const CFG_YAML = `router:
   bgp:
     global:
       as: 65501
-      identifier: 10.0.0.1
+      router-id: 10.0.0.1
     neighbor:
     - remote-address: 10.0.0.2
       afi-safi:
       - name: vpnv4
         enabled: true
-      peer-as: 65501`;
+      remote-as: 65501`;
 
 const CFG_JSON = `{
   "router": {
     "bgp": {
       "global": {
         "as": 65501,
-        "identifier": "10.0.0.1"
+        "router-id": "10.0.0.1"
       },
       "neighbor": [
         {
@@ -143,7 +142,7 @@ const CFG_JSON = `{
               "enabled": true
             }
           ],
-          "peer-as": 65501
+          "remote-as": 65501
         }
       ]
     }
@@ -183,7 +182,7 @@ function ConfigTabs() {
 function syntaxTint(s, kind) {
   // light inline highlighter — numbers, quoted strings, keywords
   const parts = [];
-  const re = /("(?:[^"\\]|\\.)*"|\b\d+(?:\.\d+)*\b|\b(?:true|false|null|as|enabled|peer-as)\b|#.*$)/gm;
+  const re = /("(?:[^"\\]|\\.)*"|\b\d+(?:\.\d+)*\b|\b(?:true|false|null|as|enabled|remote-as)\b|#.*$)/gm;
   let last = 0, m, i = 0;
   while ((m = re.exec(s))) {
     if (m.index > last) parts.push(s.slice(last, m.index));
@@ -192,7 +191,7 @@ function syntaxTint(s, kind) {
     if (/^"/.test(tok)) color = "var(--z-sage)";
     else if (/^\d/.test(tok) || /^\d+\./.test(tok)) color = "var(--z-yellow)";
     else if (/^(true|false|null)$/.test(tok)) color = "var(--z-blue)";
-    else if (/^(as|enabled|peer-as)$/.test(tok)) color = "var(--z-orange)";
+    else if (/^(as|enabled|remote-as)$/.test(tok)) color = "var(--z-orange)";
     parts.push(<span key={i++} style={{ color }}>{tok}</span>);
     last = re.lastIndex;
   }
@@ -329,16 +328,19 @@ function ProtocolsRow() {
     ["EVPN",           "RFC 7432",  "var(--z-orange)"],
   ];
   return (
-    <div id="protocols" style={{
-      display: "flex", flexWrap: "wrap", gap: 8,
-    }}>
-      {protos.map(([name, rfc, col]) => (
-        <span key={name} className="pill" style={{ fontSize: 12 }}>
-          <span className="dot2" style={{ background: col }}/>
-          <span style={{ color: "var(--fg)" }}>{name}</span>
-          {rfc && <span style={{ color: "var(--fg-muted)", marginLeft: 4 }}>{rfc}</span>}
-        </span>
-      ))}
+    <div id="protocols">
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        {protos.map(([name, rfc, col]) => (
+          <span key={name} className="pill" style={{ fontSize: 12 }}>
+            <span className="dot2" style={{ background: col }}/>
+            <span style={{ color: "var(--fg)" }}>{name}</span>
+            {rfc && <span style={{ color: "var(--fg-muted)", marginLeft: 4 }}>{rfc}</span>}
+          </span>
+        ))}
+      </div>
+      <div className="mono" style={{ marginTop: 18, fontSize: 12, color: "var(--fg-muted)" }}>
+        <a href="protocols.html" style={{ color: "var(--accent)", borderBottom: "1px solid color-mix(in oklab, var(--accent) 40%, transparent)" }}>See all supported RFCs &amp; Internet-Drafts →</a>
+      </div>
     </div>
   );
 }
@@ -358,7 +360,7 @@ function Footer() {
           <span>© 2026</span>
         </div>
         <div className="site-footer-links">
-          <a href="Docs.html">docs</a><a href="https://github.com/zebra-rs/zebra-rs" target="_blank" rel="noopener">github</a><a href="https://crates.io/crates/zebra-rs" target="_blank" rel="noopener">crates.io</a>
+          <a href="docs.html">docs</a><a href="https://github.com/zebra-rs/zebra-rs" target="_blank" rel="noopener">github</a><a href="https://crates.io/crates/zebra-rs" target="_blank" rel="noopener">crates.io</a>
           <a href="#">blog</a><a href="#">community</a>
         </div>
         <div>AGPL-3.0 licensed</div>
@@ -460,7 +462,7 @@ function LeftHero() {
           Get started
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
         </a>
-        <a className="btn btn-ghost" href="Docs.html">Read the docs</a>
+        <a className="btn btn-ghost" href="docs.html">Read the docs</a>
       </div>
       <InstallStrip />
       <div className="mono hero-meta">
