@@ -31,7 +31,7 @@
   max-height: calc(100vh - 100px);
   overflow-y: auto;
   font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: 13.5px;
   padding-right: 8px;
 }
 .docs-sidebar::-webkit-scrollbar { width: 6px; }
@@ -96,28 +96,28 @@
 
 .docs-main {
   min-width: 0;
-  font-size: 15.5px;
-  line-height: 1.7;
+  font-size: 17px;
+  line-height: 1.72;
   color: var(--fg);
   font-family: var(--font-display);
 }
 .docs-main h1 {
-  font-size: 36px;
+  font-size: 40px;
   letter-spacing: -0.8px;
   line-height: 1.15;
   margin: 0 0 24px;
   font-weight: 700;
 }
 .docs-main h2 {
-  font-size: 24px;
+  font-size: 27px;
   letter-spacing: -0.4px;
   margin: 44px 0 14px;
   padding-top: 12px;
   border-top: 1px solid var(--border);
   font-weight: 600;
 }
-.docs-main h3 { font-size: 18px; margin: 28px 0 10px; font-weight: 600; }
-.docs-main h4 { font-size: 15px; margin: 22px 0 8px; font-weight: 600; color: var(--fg-soft); text-transform: uppercase; letter-spacing: .08em; }
+.docs-main h3 { font-size: 20px; margin: 28px 0 10px; font-weight: 600; }
+.docs-main h4 { font-size: 16px; margin: 22px 0 8px; font-weight: 600; color: var(--fg-soft); text-transform: uppercase; letter-spacing: .08em; }
 .docs-main p { margin: 0 0 14px; color: var(--fg-soft); }
 .docs-main strong { color: var(--fg); }
 .docs-main em { color: var(--fg); }
@@ -145,7 +145,7 @@
   border-radius: 8px;
   padding: 14px 16px;
   overflow-x: auto;
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.6;
   margin: 0 0 16px;
   position: relative;
@@ -186,7 +186,7 @@
   border-collapse: collapse;
   width: 100%;
   margin: 0 0 20px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-family: var(--font-mono);
 }
 .docs-main th, .docs-main td {
