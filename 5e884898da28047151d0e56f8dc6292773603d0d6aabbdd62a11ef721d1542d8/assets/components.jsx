@@ -43,13 +43,15 @@ function Header({ mono, onToggleTheme, dark }) {
         display: "flex", alignItems: "center", justifyContent: "space-between",
         height: 64, gap: 16,
       }}>
-        <a href="index.html" className="site-nav-brand">
-          <ZebraLogo size={34} mono={mono} intro />
-          <span className="brand-word" style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
-          <span className="pill mono brand-pill">
-            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.6.2
-          </span>
-        </a>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+          <a href="index.html" className="site-nav-brand">
+            <ZebraLogo size={34} mono={mono} intro />
+            <span className="brand-word" style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
+          </a>
+          <a href="https://github.com/zebra-rs/zebra-rs/releases/tag/v26.7.1" target="_blank" rel="noopener" className="pill mono brand-pill" title="Release notes — v26.7.1">
+            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.7.1
+          </a>
+        </div>
         <nav className="site-nav">
           <a className="nav-link nav-link-secondary" href="#features" style={{ color: "var(--fg-soft)" }}>features</a>
           <a className="nav-link nav-link-secondary" href="#install" style={{ color: "var(--fg-soft)" }}>install</a>
