@@ -4,7 +4,7 @@
 const { useState: useStateP, useEffect: useEffectP } = React;
 
 function ProtocolsApp() {
-  const [dark, setDark]     = useStateP(() => localStorage.getItem("z.dark") !== null ? localStorage.getItem("z.dark") === "1" : true);
+  const [dark, setDark]     = useStateP(() => localStorage.getItem("z.dark") !== null ? localStorage.getItem("z.dark") === "1" : false);
   const [accent, setAccent] = useStateP(() => localStorage.getItem("z.accent") || "#e38829");
   const [mono, setMono]     = useStateP(() => localStorage.getItem("z.mono") === "1");
 
