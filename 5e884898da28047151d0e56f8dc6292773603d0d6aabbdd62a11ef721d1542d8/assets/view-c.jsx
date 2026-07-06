@@ -1,42 +1,29 @@
-/* Variation C — Topology panel (right side only) */
-const { useState: useStateC, useEffect: useEffectC, useRef: useRefC } = React;
+/* Variation C — Traceroute panel (right side only)
+   Simplified from an EdgeLQ path-trace report: EGRESS hops only, UDP only,
+   no info-boxes / analysis summary. Themed to the zebra-rs palette + mono font. */
+
+const { useState: useStateC, useEffect: useEffectC } = React;
+
+const TRACE_HOPS = [
+  { hop: "1", ip: "172.27.0.11",   prov: "Local Gateway", provCol: "var(--z-mustard)", region: "Sunnyvale, CA", asn: "—",      loss: "0%",  lossCls: "good", avg: "0.6" },
+  { hop: "2", ip: "172.27.52.4",   prov: "Local Network", provCol: "var(--z-mustard)", region: "Sunnyvale, CA", asn: "—",      loss: "0%",  lossCls: "good", avg: "0.3" },
+  { hop: "3", ip: "50.231.72.185", prov: "Comcast Cable", provCol: "var(--z-orange)",  region: "California",    asn: "AS7922", loss: "0%",  lossCls: "good", avg: "0.9" },
+  { hop: "4", ip: "* * *",         prov: "Comcast Cable", provCol: "var(--z-orange)",  region: "—",             asn: "AS7922", loss: "100%",lossCls: "bad",  avg: "—",  down: true },
+  { hop: "5", ip: "96.216.162.57", prov: "Comcast Cable", provCol: "var(--z-orange)",  region: "San Jose, CA",  asn: "AS7922", loss: "0%",  lossCls: "good", avg: "1.1" },
+  { hop: "6", ip: "96.110.41.121", prov: "Comcast Cable", provCol: "var(--z-orange)",  region: "California",    asn: "AS7922", loss: "0%",  lossCls: "good", avg: "1.6" },
+  { hop: "7", ip: "96.110.33.98",  prov: "Comcast Cable", provCol: "var(--z-orange)",  region: "California",    asn: "AS7922", loss: "0%",  lossCls: "good", avg: "1.6" },
+  { hop: "8", ip: "* * *",         prov: "Interconnect",  provCol: "var(--fg-muted)",  region: "—",             asn: "—",      loss: "100%",lossCls: "bad",  avg: "—",  down: true },
+];
 
 function TopologyPanel() {
-  const svgRef = useRefC(null);
-  const nodes = [
-    { id: 1, x: 120, y: 120, col: "var(--z-yellow)",  label: "edge-sfo",  as: 64512 },
-    { id: 2, x: 320, y: 120, col: "var(--z-mustard)", label: "core-01",   as: 64512 },
-    { id: 3, x: 520, y: 120, col: "var(--z-blue)",    label: "edge-nrt",  as: 64600 },
-    { id: 4, x: 120, y: 260, col: "var(--z-orange)",  label: "tor-a",     as: 64512 },
-    { id: 5, x: 320, y: 260, col: "var(--z-sage)",    label: "rr",        as: 64512 },
-    { id: 6, x: 520, y: 260, col: "var(--z-teal)",    label: "core-02",   as: 64512 },
-    { id: 7, x: 120, y: 400, col: "var(--z-red)",     label: "tor-b",     as: 64512 },
-    { id: 8, x: 320, y: 400, col: "var(--z-moss)",    label: "agent",     as: "mcp"  },
-    { id: 9, x: 520, y: 400, col: "var(--z-mint)",    label: "edge-fra",  as: 64700 },
-  ];
-
-  const links = [
-    [1,2],[2,3],[4,5],[5,6],[7,8],[8,9],
-    [1,4],[4,7],[2,5],[5,8],[3,6],[6,9],
-    [2,4],[2,6],[5,3],[5,7],[5,9],
-  ];
-
-  const find = id => nodes.find(n => n.id === id);
-
-  const [packets, setPackets] = useStateC([]);
+  // gently animate a "probing" indicator down the egress path
+  const [active, setActive] = useStateC(0);
   useEffectC(() => {
-    let idCtr = 0;
-    const id = setInterval(() => {
-      const [a, b] = links[Math.floor(Math.random() * links.length)];
-      const from = Math.random() < 0.5 ? a : b;
-      const to = from === a ? b : a;
-      const na = find(from), nb = find(to);
-      const pid = idCtr++;
-      setPackets(ps => [...ps, { id: pid, from, to, x: na.x, y: na.y, tx: nb.x, ty: nb.y, col: na.col, start: Date.now() }]);
-      setTimeout(() => setPackets(ps => ps.filter(p => p.id !== pid)), 1100);
-    }, 280);
+    const id = setInterval(() => setActive(a => (a + 1) % TRACE_HOPS.length), 700);
     return () => clearInterval(id);
   }, []);
+
+  const lossColor = (cls) => cls === "good" ? "#4ec17a" : cls === "warn" ? "var(--z-yellow)" : "var(--z-red)";
 
   return (
     <div style={{
@@ -47,47 +34,52 @@ function TopologyPanel() {
       <div style={{
         padding: "10px 16px", borderBottom: "1px solid var(--border)",
         fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-muted)",
-        display: "flex", gap: 16, background: "var(--bg-soft)",
+        display: "flex", gap: 12, alignItems: "center", background: "var(--bg-soft)",
       }}>
-        <span>fabric.preview</span>
-        <span>17 links</span>
-        <span>3 ASes</span>
-        <span style={{ marginLeft: "auto", color: "var(--accent)" }}>● converged</span>
+        <span style={{ color: "var(--fg)" }}>traceroute</span>
+        <span>brand.example.com</span>
+        <span style={{
+          padding: "1px 7px", borderRadius: 4, fontSize: 9.5, fontWeight: 700,
+          letterSpacing: ".08em", textTransform: "uppercase",
+          background: "var(--accent)", color: "#000",
+        }}>UDP</span>
+        <span style={{ marginLeft: "auto", color: "var(--accent)" }}>● egress</span>
       </div>
-      <svg ref={svgRef} viewBox="0 0 640 520" width="100%" style={{ display: "block", background: "var(--bg-card)" }}>
-        <defs>
-          <pattern id="gridpat" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--grid)" strokeWidth="1"/>
-          </pattern>
-        </defs>
-        <rect width="640" height="520" fill="url(#gridpat)" />
-        <rect x="60" y="60" width="520" height="400" fill="none" stroke="var(--border)" strokeDasharray="3 4" rx="16"/>
-        <text x="72" y="80" fontFamily="var(--font-mono)" fontSize="10" fill="var(--fg-muted)" letterSpacing="0.1em">AS 64512 · CORE</text>
-        {links.map(([a, b], i) => {
-          const na = find(a), nb = find(b);
-          return <line key={i} x1={na.x} y1={na.y} x2={nb.x} y2={nb.y} stroke="var(--border-strong)" strokeWidth="1" />;
-        })}
-        {packets.map(p => {
-          const dur = 1.05;
-          return (
-            <circle key={p.id} r="3.5" fill={p.col}>
-              <animate attributeName="cx" from={p.x} to={p.tx} dur={`${dur}s`} fill="freeze" />
-              <animate attributeName="cy" from={p.y} to={p.ty} dur={`${dur}s`} fill="freeze" />
-              <animate attributeName="opacity" values="0;1;1;0" dur={`${dur}s`} fill="freeze" />
-            </circle>
-          );
-        })}
-        {nodes.map(n => (
-          <g key={n.id}>
-            <circle cx={n.x} cy={n.y} r="22" fill={n.col} opacity="0.2" />
-            <circle cx={n.x} cy={n.y} r="12" fill={n.col}>
-              <animate attributeName="r" values="12;13.5;12" dur="2.2s" repeatCount="indefinite" begin={`${n.id * 0.2}s`}/>
-            </circle>
-            <text x={n.x} y={n.y + 42} textAnchor="middle" fontFamily="var(--font-mono)" fontSize="10" fill="var(--fg-soft)">{n.label}</text>
-            <text x={n.x} y={n.y + 55} textAnchor="middle" fontFamily="var(--font-mono)" fontSize="9" fill="var(--fg-muted)">AS {n.as}</text>
-          </g>
-        ))}
-      </svg>
+      <div className="panel-body" style={{ overflowX: "auto", overflowY: "auto" }}>
+        <table className="route-table">
+          <thead>
+            <tr>
+              <th>hop</th><th>ip address</th><th>provider</th>
+              <th>asn</th><th>loss</th><th>avg</th>
+            </tr>
+          </thead>
+          <tbody>
+            {TRACE_HOPS.map((h, i) => (
+              <tr key={h.hop} style={{
+                opacity: h.down ? 0.55 : 1,
+                background: i === active ? "color-mix(in oklab, var(--accent) 12%, transparent)" : "transparent",
+                transition: "background 400ms ease",
+              }}>
+                <td style={{ color: "var(--accent)", fontWeight: 700 }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                    <span style={{
+                      display: "inline-flex", alignItems: "center", justifyContent: "center",
+                      width: 16, height: 16, borderRadius: "50%",
+                      border: "1.5px solid #4ec17a", color: "#4ec17a", fontSize: 9,
+                    }}>→</span>
+                    {h.hop}
+                  </span>
+                </td>
+                <td style={{ color: h.down ? "var(--fg-muted)" : "var(--fg)" }}>{h.ip}</td>
+                <td><span className="badge-as" style={{ color: h.provCol }}>{h.prov}</span></td>
+                <td style={{ color: "var(--z-yellow)" }}>{h.asn}</td>
+                <td style={{ color: lossColor(h.lossCls), fontWeight: 600 }}>{h.loss}</td>
+                <td>{h.avg}{h.avg !== "—" ? " ms" : ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
