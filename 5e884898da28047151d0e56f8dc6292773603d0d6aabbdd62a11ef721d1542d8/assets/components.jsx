@@ -417,8 +417,8 @@ function TweaksPanel({ open, mono, setMono, accent, setAccent, onClose }) {
 function ViewSwitch({ view, setView }) {
   const views = [
     ["A", "terminal"],
-    ["B", "is-is"],
-    ["C", "topology"],
+    ["B", "topology"],
+    ["C", "traceroute"],
   ];
   return (
     <div className="view-switch">
