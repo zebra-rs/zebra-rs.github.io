@@ -76,6 +76,29 @@ function App() {
           </div>
         </div>
 
+        <section id="news" style={{ paddingTop: 48 }}>
+          <SectionHead eyebrow="news" titleClass="news-title" title="2026/07/06 — First public release of zebra-rs" />
+          <div className="card" style={{ maxWidth: 860 }}>
+            <div className="mono" style={{ fontSize: 12.5, color: "var(--accent)", marginBottom: 12, letterSpacing: ".04em" }}>
+              2026 / 07 / 06
+            </div>
+            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
+              First public release of zebra-rs, a routing stack written from scratch in
+              Rust. The first AI-native implementation, supporting cutting-edge routing
+              protocols including{" "}
+              <span style={{ color: "var(--fg)" }}>SRv6</span>,{" "}
+              <span style={{ color: "var(--fg)" }}>SR-MPLS</span>,{" "}
+              <span style={{ color: "var(--fg)" }}>L3VPN</span>, and{" "}
+              <span style={{ color: "var(--fg)" }}>EVPN</span>. Built on a memory-safe,
+              fully asynchronous core, zebra-rs applies configuration idempotently and
+              exposes its entire routing state to AI agents through a native MCP server —
+              so operators can inspect adjacencies, diagnose sessions, and draft policy
+              in natural language. This first release lays the foundation for a modern,
+              open, and programmable control plane for the AI and container era.
+            </p>
+          </div>
+        </section>
+
         <section style={{ paddingTop: 48 }}>
           <SectionHead eyebrow="features" title="Built for the modern edge." />
           <FeatureCards />
@@ -113,14 +136,14 @@ function App() {
   );
 }
 
-function SectionHead({ eyebrow, title }) {
+function SectionHead({ eyebrow, title, titleClass }) {
   return (
     <div style={{ marginBottom: 28 }}>
       {eyebrow && <div className="mono" style={{
         fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase",
         color: "var(--fg-muted)", marginBottom: 10,
       }}>— {eyebrow}</div>}
-      <h2 style={{
+      <h2 className={titleClass || ""} style={{
         margin: 0, fontSize: "clamp(26px, 3vw, 36px)", fontWeight: 400,
         letterSpacing: -0.6, maxWidth: 760,
       }}>{title}</h2>

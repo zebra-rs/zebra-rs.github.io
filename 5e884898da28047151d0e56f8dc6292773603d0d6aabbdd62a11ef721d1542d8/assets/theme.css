@@ -293,6 +293,10 @@ kbd {
 .fade-up { opacity: 0; transform: translateY(8px); animation: fadeUp .6s forwards .05s; }
 @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
+/* News header: keep on one line on desktop, allow wrap on phones */
+.news-title { white-space: nowrap; max-width: none !important; }
+@media (max-width: 640px) { .news-title { white-space: normal; } }
+
 /* ─────────────────────────── RFC inventory (Appendix B) ─────────────────────────── */
 .rfc-tabs {
   display: flex; flex-wrap: wrap; gap: 8px;

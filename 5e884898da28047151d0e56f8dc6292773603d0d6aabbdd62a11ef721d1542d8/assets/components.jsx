@@ -53,7 +53,7 @@ function Header({ mono, onToggleTheme, dark }) {
           </a>
         </div>
         <nav className="site-nav">
-          <a className="nav-link nav-link-secondary" href="#install" style={{ color: "var(--fg-soft)" }}>install</a>
+          <a className="nav-link nav-link-secondary" href="install.html" style={{ color: "var(--fg-soft)" }}>install</a>
           <a className="nav-link" href="docs.html" style={{ color: "var(--fg-soft)" }}>docs</a>
           <a className="nav-link nav-link-secondary" href="protocols.html" style={{ color: "var(--fg-soft)" }}>protocols</a>
           <a href="https://github.com/zebra-rs/zebra-rs" target="_blank" rel="noopener" style={{ color: "var(--fg-soft)", display: "inline-flex", gap: 6, alignItems: "center" }}>
