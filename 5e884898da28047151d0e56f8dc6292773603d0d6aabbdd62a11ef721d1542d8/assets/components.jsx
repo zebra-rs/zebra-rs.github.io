@@ -458,7 +458,7 @@ function LeftHero() {
         maxWidth: 520, margin: "0 0 28px",
       }}>zebra-rs is a BGP, OSPF, and IS‑IS routing stack with SRv6, SR-MPLS, L3VPN, and EVPN extensions, written from scratch in Rust. Memory‑safe, async to the core, idempotent by design — and the first routing daemon to ship with a native MCP server for AI agents.</p>
       <div className="hero-cta">
-        <a className="btn btn-primary" href="#install">
+        <a className="btn btn-primary" href="install.html">
           Get started
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
         </a>
