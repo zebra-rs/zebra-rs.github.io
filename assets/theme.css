@@ -178,17 +178,34 @@ html.dark .logo-mono .cls-9 { fill: #aaaaaa; }
 
 /* ————— variation chrome ————— */
 .view-switch {
-  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
-  z-index: 90; display: inline-flex; gap: 0;
-  background: var(--bg-card); border: 1px solid var(--border-strong);
-  border-radius: 999px; padding: 3px; font-family: var(--font-mono); font-size: 11px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  display: flex; justify-content: center; gap: 18px;
+  margin: 8px 0 28px;
 }
 .view-switch button {
-  background: transparent; border: 0; color: var(--fg-soft);
-  padding: 6px 14px; border-radius: 999px; letter-spacing: .02em;
+  background: transparent; border: 0; padding: 6px 4px;
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--fg-muted);
+  cursor: pointer;
 }
-.view-switch button.active { background: var(--fg); color: var(--bg); }
+.view-switch .view-dot {
+  width: 10px; height: 10px; border-radius: 999px;
+  background: var(--border-strong);
+  transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.view-switch .view-label {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  opacity: 0; transform: translateX(-4px);
+  transition: opacity .18s ease, transform .18s ease, color .18s ease;
+}
+.view-switch button:hover .view-dot { background: var(--fg-soft); }
+.view-switch button:hover .view-label { opacity: .6; transform: translateX(0); }
+.view-switch button.active .view-dot {
+  background: var(--accent); transform: scale(1.15);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 18%, transparent);
+}
+.view-switch button.active .view-label {
+  opacity: 1; transform: translateX(0); color: var(--fg);
+}
 
 /* universal accent helpers */
 .accent { color: var(--accent); }
@@ -275,3 +292,164 @@ kbd {
 /* reveal on mount */
 .fade-up { opacity: 0; transform: translateY(8px); animation: fadeUp .6s forwards .05s; }
 @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+/* News header: keep on one line on desktop, allow wrap on phones */
+.news-title { white-space: nowrap; max-width: none !important; }
+@media (max-width: 640px) { .news-title { white-space: normal; } }
+
+/* ─────────────────────────── RFC inventory (Appendix B) ─────────────────────────── */
+.rfc-tabs {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 24px;
+}
+.rfc-tab {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 999px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: 13.5px; color: var(--fg-soft);
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.rfc-tab:hover { color: var(--fg); border-color: var(--border-strong); }
+.rfc-tab.active { background: var(--bg-soft); }
+.rfc-tab .dot2 { width: 8px; height: 8px; border-radius: 50%; }
+.rfc-tab-count {
+  font-size: 10.5px; color: var(--fg-muted);
+  background: var(--chip-bg); border-radius: 999px;
+  padding: 1px 7px; margin-left: 2px;
+}
+.rfc-tab.active .rfc-tab-count { color: var(--fg-soft); }
+
+.rfc-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+.rfc-item {
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rfc-badge {
+  flex-shrink: 0;
+  font-family: var(--font-mono); font-size: 12.5px;
+  padding: 3px 8px; border-radius: 5px;
+  border: 1px solid var(--border-strong);
+  white-space: nowrap;
+  min-width: 92px; text-align: center;
+}
+.rfc-desc {
+  font-size: 15px; line-height: 1.5; color: var(--fg-soft);
+  text-wrap: pretty;
+}
+.rfc-foot {
+  margin-top: 22px; font-size: 12px; color: var(--fg-muted);
+}
+.rfc-foot a { color: var(--accent); border-bottom: 1px solid color-mix(in oklab, var(--accent) 40%, transparent); }
+
+@media (max-width: 780px) {
+  .rfc-list { grid-template-columns: 1fr; gap: 0; }
+  .rfc-badge { min-width: 84px; font-size: 11px; }
+}
+
+/* ─────────────────────────── Layout primitives (responsive) ─────────────────────────── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 48px;
+  align-items: start;
+  padding: 56px 0 16px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.site-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.site-nav-brand .brand-pill { margin-left: 6px; }
+.site-footer-inner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: center;
+}
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 28px;
+}
+.hero-cta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.hero-meta {
+  margin-top: 22px;
+  font-size: 11.5px;
+  color: var(--fg-muted);
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.panel-frame { /* TerminalPanel / RoutesPanel / TopologyPanel shared shell */
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--bg-card);
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,.25);
+}
+.panel-body { height: 480px; }
+
+/* tablet ≤ 980px: collapse hero & features */
+@media (max-width: 980px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+    padding: 36px 0 8px;
+  }
+  .features-grid { grid-template-columns: 1fr; gap: 16px; }
+  .site-nav { gap: 18px; }
+  .site-nav a.nav-link-secondary { display: none; }
+  .panel-body { height: 380px; }
+}
+
+/* phone ≤ 640px */
+@media (max-width: 640px) {
+  .container { padding-left: 16px; padding-right: 16px; }
+  .hero-grid { padding: 24px 0 4px; gap: 28px; }
+  .site-nav { gap: 12px; }
+  .site-nav a.nav-link { display: none; } /* hide text links — keep logo, github, theme */
+  .site-nav-brand .brand-pill { display: none; }
+  .site-nav-brand .brand-word { font-size: 18px !important; }
+  .site-footer-inner { flex-direction: column; align-items: flex-start; gap: 18px; }
+  .panel-body { height: 320px; font-size: 11.5px !important; padding: 12px 14px !important; }
+  .route-table th, .route-table td { padding: 6px 8px; font-size: 11px; }
+  .view-switch { gap: 12px; margin: 6px 0 20px; }
+  .view-switch .view-label { display: none; }
+  .card { padding: 18px; }
+  .tweaks-panel {
+    left: 12px; right: 12px; bottom: 12px; width: auto;
+  }
+  /* shrink hero hero typography a hair further on tiny screens */
+  h1.hero-h1 { letter-spacing: -0.6px !important; }
+}
+
+/* very narrow ≤ 380px */
+@media (max-width: 380px) {
+  .hero-meta { font-size: 10.5px; gap: 10px; }
+  .install-cmd { font-size: 11.5px !important; }
+}
