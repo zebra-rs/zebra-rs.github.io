@@ -1,158 +1,183 @@
-/* Variation B — Routes table hero
-   Live-updating BGP/OSPF routing table as the hero surface.
-   Data density is the point. */
+/* Variation B — IS-IS L2 topology panel (right side only)
+   Force-directed graph rendered with D3, themed via CSS custom properties.
+   Data adapted from the AI-rendered isis-topology export. */
 
-const { useState: useStateB, useEffect: useEffectB } = React;
+const { useRef: useRefB, useEffect: useEffectB } = React;
 
-const BASE_ROUTES = [
-  { prefix: "10.0.0.0/8",      nh: "10.211.55.1",  proto: "bgp",   as: "64512", state: "up",   age: "04:22:11", med: 100, pref: 200, col: "var(--z-orange)" },
-  { prefix: "172.16.0.0/12",   nh: "10.211.55.1",  proto: "bgp",   as: "64512", state: "up",   age: "04:22:09", med: 100, pref: 200, col: "var(--z-orange)" },
-  { prefix: "192.168.1.0/24",  nh: "10.0.0.1",     proto: "ospf",  as: "—",     state: "up",   age: "04:19:02", med: 10,  pref: 110, col: "var(--z-blue)" },
-  { prefix: "2001:db8::/32",   nh: "fe80::1",      proto: "bgp",   as: "64600", state: "up",   age: "02:51:44", med: 50,  pref: 200, col: "var(--z-orange)" },
-  { prefix: "198.51.100.0/24", nh: "10.0.0.2",     proto: "isis",  as: "—",     state: "up",   age: "04:22:11", med: 20,  pref: 115, col: "var(--z-teal)" },
-  { prefix: "203.0.113.0/24",  nh: "10.0.0.9",     proto: "bgp",   as: "65001", state: "idle", age: "—",        med: "—", pref: "—", col: "var(--z-mustard)" },
-  { prefix: "10.100.0.0/16",   nh: "10.211.55.5",  proto: "static",as: "—",     state: "up",   age: "15d",      med: 0,   pref: 1,   col: "var(--z-sage)" },
-  { prefix: "10.200.0.0/16",   nh: "10.211.55.7",  proto: "bgp",   as: "64700", state: "up",   age: "00:11:03", med: 100, pref: 200, col: "var(--z-orange)" },
-  { prefix: "100.64.0.0/10",   nh: "10.0.0.1",     proto: "ospf",  as: "—",     state: "up",   age: "04:19:02", med: 10,  pref: 110, col: "var(--z-blue)" },
-];
+const ISIS_DATA = {
+  level: "L2",
+  nodes: [
+    { id: 0, name: "n1", sys_id: "0000.0000.0002" },
+    { id: 1, name: "s",  sys_id: "0000.0000.0001" },
+    { id: 2, name: "n2", sys_id: "0000.0000.0003" },
+    { id: 3, name: "n3", sys_id: "0000.0000.0004" },
+    { id: 4, name: "r1", sys_id: "0000.0000.0005" },
+    { id: 5, name: "r2", sys_id: "0000.0000.0006" },
+    { id: 6, name: "d",  sys_id: "0000.0000.0008" },
+    { id: 7, name: "r3", sys_id: "0000.0000.0007" },
+  ],
+  links_raw: [
+    { from: 0, to: 1, cost: 10 },   { from: 0, to: 4, cost: 10 },
+    { from: 0, to: 5, cost: 1 },    { from: 0, to: 6, cost: 1 },
+    { from: 1, to: 0, cost: 1 },    { from: 1, to: 2, cost: 10 },
+    { from: 1, to: 3, cost: 1000 }, { from: 2, to: 1, cost: 10 },
+    { from: 2, to: 4, cost: 10 },   { from: 3, to: 1, cost: 1000 },
+    { from: 3, to: 4, cost: 1000 }, { from: 4, to: 0, cost: 10 },
+    { from: 4, to: 2, cost: 10 },   { from: 4, to: 3, cost: 1000 },
+    { from: 4, to: 5, cost: 1000 }, { from: 5, to: 0, cost: 1 },
+    { from: 5, to: 4, cost: 1000 }, { from: 5, to: 7, cost: 1000 },
+    { from: 6, to: 0, cost: 1 },    { from: 6, to: 7, cost: 1 },
+    { from: 7, to: 5, cost: 1000 }, { from: 7, to: 6, cost: 1 },
+  ],
+};
 
-function RoutesHero() {
-  const [rows, setRows] = useStateB(BASE_ROUTES);
-  const [flash, setFlash] = useStateB({});
-  const [ts, setTs] = useStateB(new Date());
+function processIsisLinks(raw) {
+  const m = new Map();
+  raw.forEach(l => {
+    const key = Math.min(l.from, l.to) + "-" + Math.max(l.from, l.to);
+    if (!m.has(key)) m.set(key, { source: l.from, target: l.to, costForward: null, costReverse: null });
+    const e = m.get(key);
+    if (l.from < l.to) e.costForward = l.cost; else e.costReverse = l.cost;
+  });
+  return Array.from(m.values()).map(l => ({
+    source: l.source, target: l.target,
+    costForward: l.costForward, costReverse: l.costReverse,
+    isSymmetric: l.costForward === l.costReverse,
+  }));
+}
+
+function IsisPanel() {
+  const wrapRef = useRefB(null);
+  const svgRef = useRefB(null);
 
   useEffectB(() => {
-    const id = setInterval(() => {
-      setTs(new Date());
-      setRows(prev => {
-        const i = Math.floor(Math.random() * prev.length);
-        const next = prev.slice();
-        const r = { ...next[i] };
-        // tweak metrics
-        if (typeof r.med === "number") r.med = Math.max(0, r.med + (Math.random() < 0.5 ? -1 : 1) * Math.floor(Math.random() * 4));
-        // occasionally flip idle/up
-        if (Math.random() < 0.18 && r.proto === "bgp") {
-          r.state = r.state === "up" ? "idle" : "up";
-          r.age = r.state === "up" ? "00:00:01" : "—";
-        }
-        next[i] = r;
-        setFlash(f => ({ ...f, [i]: Date.now() }));
-        return next;
+    if (!window.d3 || !svgRef.current || !wrapRef.current) return;
+    const d3 = window.d3;
+
+    // resolve theme colors from CSS custom properties
+    const cs = getComputedStyle(document.documentElement);
+    const v = (n, f) => (cs.getPropertyValue(n).trim() || f);
+    const COL = {
+      node:   v("--z-blue", "#398ccc"),
+      nodeStroke: v("--accent", "#e38829"),
+      link:   v("--accent", "#e38829"),
+      sym:    "#4ec17a",
+      asym:   v("--z-red", "#d64c16"),
+      label:  v("--fg", "#0a0a0a"),
+      cardBg: v("--bg-card", "#fff"),
+    };
+    const monoFont = v("--font-mono", "monospace").replace(/["']/g, "");
+
+    const wrap = wrapRef.current;
+    const width = wrap.clientWidth || 640;
+    const height = wrap.clientHeight || 460;
+
+    const nodes = ISIS_DATA.nodes.map(n => ({ ...n }));
+    // initial (non-fixed) placement hints for corner nodes
+    const CORNERS = {
+      1: [width * 0.22, height * 0.25], // s   upper-left
+      6: [width * 0.78, height * 0.25], // d   upper-right
+      3: [width * 0.22, height * 0.75], // n3  lower-left
+      7: [width * 0.78, height * 0.75], // r3  lower-right
+      4: [width * 0.50, height * 0.80], // r1  lower-middle
+    };
+    nodes.forEach(n => { const c = CORNERS[n.id]; if (c) { n.x = c[0]; n.y = c[1]; } });
+    // pin s to the upper-left so it settles there
+    { const s = nodes.find(n => n.id === 1); if (s) { s.fx = CORNERS[1][0]; s.fy = CORNERS[1][1]; } }
+    const links = processIsisLinks(ISIS_DATA.links_raw);
+
+    const svg = d3.select(svgRef.current)
+      .attr("width", width).attr("height", height)
+      .attr("viewBox", `0 0 ${width} ${height}`);
+    svg.selectAll("*").remove();
+
+    const sim = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(110))
+      .force("charge", d3.forceManyBody().strength(-520))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius(38))
+      .velocityDecay(0.82).alphaDecay(0).alphaTarget(0.12);
+
+    const link = svg.append("g").selectAll("line")
+      .data(links).enter().append("line")
+      .attr("stroke", COL.link).attr("stroke-width", 2).attr("stroke-linecap", "round")
+      .attr("opacity", 0.55);
+
+    const metricG = svg.append("g").selectAll("g")
+      .data(links).enter().append("g");
+    metricG.append("text").attr("data-type", "f")
+      .attr("font-family", monoFont).attr("font-size", 10).attr("font-weight", 700)
+      .attr("fill", d => d.isSymmetric ? COL.sym : COL.asym)
+      .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+      .text(d => d.costForward != null ? d.costForward : "");
+    metricG.append("text").attr("data-type", "r")
+      .attr("font-family", monoFont).attr("font-size", 10).attr("font-weight", 700)
+      .attr("fill", d => d.isSymmetric ? COL.sym : COL.asym)
+      .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+      .text(d => d.costReverse != null ? d.costReverse : "");
+
+    const node = svg.append("g").selectAll("g")
+      .data(nodes).enter().append("g")
+      .style("cursor", "grab")
+      .call(d3.drag()
+        .on("start", (e, d) => { if (!e.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+        .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
+        .on("end", (e, d) => { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }));
+
+    node.append("circle").attr("r", 20)
+      .attr("fill", COL.node).attr("stroke", COL.nodeStroke).attr("stroke-width", 2);
+    node.append("text").attr("dy", 4).attr("text-anchor", "middle")
+      .attr("font-family", monoFont).attr("font-size", 11).attr("font-weight", 700)
+      .attr("fill", "#fff").style("pointer-events", "none")
+      .text(d => d.name);
+
+    sim.on("tick", () => {
+      // gentle continuous drift ("gravity"-like float)
+      nodes.forEach(n => {
+        if (n.fx == null) { n.vx += (Math.random() - 0.5) * 0.6; n.vy += (Math.random() - 0.5) * 0.6; }
       });
-    }, 1400);
-    return () => clearInterval(id);
+      link.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
+      metricG.each(function (d) {
+        const g = d3.select(this);
+        const dx = d.target.x - d.source.x, dy = d.target.y - d.source.y;
+        const ang = Math.atan2(dy, dx);
+        const off = 11, px = -Math.sin(ang) * off, py = Math.cos(ang) * off;
+        g.select('[data-type="f"]')
+          .attr("x", d.source.x + dx * 0.35 + px).attr("y", d.source.y + dy * 0.35 + py);
+        g.select('[data-type="r"]')
+          .attr("x", d.source.x + dx * 0.65 + px).attr("y", d.source.y + dy * 0.65 + py);
+      });
+    });
+
+    return () => sim.stop();
   }, []);
 
-  const peers = [
-    { name: "10.0.0.1",  as: "64512", state: "Established",  up: "04:22",  pfx: 128414, col: "var(--z-orange)" },
-    { name: "10.0.0.2",  as: "64512", state: "Established",  up: "04:22",  pfx:   4021, col: "var(--z-orange)" },
-    { name: "10.0.0.9",  as: "65001", state: "Idle",         up: "—",      pfx:      0, col: "var(--z-mustard)" },
-    { name: "fe80::1",   as: "64600", state: "Established",  up: "02:51",  pfx:   9120, col: "var(--z-blue)" },
-  ];
-
   return (
-    <div style={{ padding: "56px 0 40px" }}>
+    <div style={{
+      border: "1px solid var(--border-strong)", borderRadius: 12,
+      background: "var(--bg-card)", overflow: "hidden",
+      boxShadow: "0 30px 80px rgba(0,0,0,.25)",
+    }}>
       <div style={{
-        display: "grid", gridTemplateColumns: "minmax(0, 440px) 1fr",
-        gap: 48, alignItems: "end", marginBottom: 28,
+        display: "flex", alignItems: "center", gap: 12,
+        padding: "12px 18px", borderBottom: "1px solid var(--border)",
+        background: "var(--bg-soft)", fontFamily: "var(--font-mono)", fontSize: 11,
+        color: "var(--fg-muted)",
       }}>
-        <div>
-          <div className="pill mono" style={{ marginBottom: 18 }}>
-            <span className="dot2" style={{ background: "var(--accent)" }}/> edge-01.sfo · live
-          </div>
-          <h1 style={{
-            fontSize: "clamp(36px, 4.8vw, 58px)", lineHeight: 1.05,
-            margin: "0 0 18px", letterSpacing: -1, fontWeight: 700,
-          }}>
-            Routing Software<br/>
-            <span style={{ color: "var(--fg-soft)" }}>in the </span>
-            <span className="accent">AI&nbsp;Era.</span>
-          </h1>
-          <p style={{ fontSize: 16, color: "var(--fg-soft)", lineHeight: 1.55, margin: "0 0 22px", maxWidth: 460 }}>
-            A full BGP, OSPF, IS‑IS, and SR-MPLS stack written in Rust. Converges fast, applies idempotently, and speaks MCP natively.
-          </p>
-          <div style={{ display: "flex", gap: 12, marginBottom: 22 }}>
-            <a className="btn btn-primary" href="#install">Install</a>
-            <a className="btn btn-ghost" href="#docs">Browse protocols</a>
-          </div>
-          <InstallStrip />
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
-          {peers.map(p => (
-            <div key={p.name} className="mono" style={{
-              border: "1px solid var(--border)", borderRadius: 8, padding: 12,
-              background: "var(--bg-card)",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--fg-muted)" }}>
-                <span className="dot2" style={{ background: p.state === "Idle" ? "var(--fg-muted)" : "#4ec17a" }}/>
-                peer
-              </div>
-              <div style={{ fontSize: 13, marginTop: 4, color: "var(--fg)" }}>{p.name}</div>
-              <div style={{ fontSize: 10.5, color: "var(--fg-muted)", marginTop: 2 }}>AS {p.as} · {p.state}</div>
-              <div style={{ fontSize: 16, marginTop: 10, color: p.state === "Idle" ? "var(--fg-muted)" : "var(--fg)" }}>
-                {p.pfx.toLocaleString()}
-              </div>
-              <div style={{ fontSize: 10, color: "var(--fg-muted)" }}>prefixes · up {p.up}</div>
-            </div>
-          ))}
-        </div>
+        <span style={{ color: "var(--fg)" }}>show isis topology</span>
+        <span>— {ISIS_DATA.level} · {ISIS_DATA.nodes.length} nodes</span>
+        <span style={{ marginLeft: "auto", display: "inline-flex", gap: 14 }}>
+          <span><span style={{ color: "#4ec17a" }}>●</span> symmetric</span>
+          <span><span style={{ color: "var(--z-red)" }}>●</span> asymmetric</span>
+        </span>
       </div>
-
-      {/* live routes table */}
-      <div style={{
-        border: "1px solid var(--border-strong)", borderRadius: 12,
-        background: "var(--bg-card)", overflow: "hidden",
-      }}>
-        <div style={{
-          display: "flex", alignItems: "center", gap: 12,
-          padding: "12px 18px", borderBottom: "1px solid var(--border)",
-          background: "var(--bg-soft)", fontFamily: "var(--font-mono)", fontSize: 12,
-        }}>
-          <span style={{ color: "var(--fg)" }}>show ip route</span>
-          <span style={{ color: "var(--fg-muted)" }}>— {rows.length} prefixes · {ts.toLocaleTimeString()}</span>
-          <span style={{ marginLeft: "auto", color: "var(--fg-muted)", display: "inline-flex", gap: 14 }}>
-            <span><span style={{ color: "#4ec17a" }}>●</span> up</span>
-            <span><span style={{ color: "var(--fg-muted)" }}>●</span> idle</span>
-            <span className="accent">↺ updates live</span>
-          </span>
-        </div>
-        <div style={{ overflowX: "auto" }}>
-          <table className="route-table">
-            <thead>
-              <tr>
-                <th>prefix</th><th>next-hop</th><th>proto</th><th>peer-as</th>
-                <th>state</th><th>age</th><th>med</th><th>pref</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r, i) => {
-                const flashing = flash[i] && Date.now() - flash[i] < 900;
-                return (
-                  <tr key={r.prefix} style={{
-                    background: flashing ? "color-mix(in oklab, var(--accent) 12%, transparent)" : "transparent",
-                    transition: "background 900ms ease",
-                  }}>
-                    <td style={{ color: "var(--fg)" }}>{r.prefix}</td>
-                    <td>{r.nh}</td>
-                    <td><span className="badge-as" style={{ color: r.col }}>{r.proto}</span></td>
-                    <td>{r.as}</td>
-                    <td className={r.state === "up" ? "state-up" : "state-idle"}>
-                      <span className="dot2" style={{ display: "inline-block", width: 6, height: 6, borderRadius: 3, background: r.state === "up" ? "#4ec17a" : "var(--fg-muted)", marginRight: 6 }}/>
-                      {r.state}
-                    </td>
-                    <td>{r.age}</td>
-                    <td>{r.med}</td>
-                    <td>{r.pref}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+      <div ref={wrapRef} className="panel-body" style={{ padding: 0 }}>
+        <svg ref={svgRef} style={{ display: "block", width: "100%", height: "100%" }} />
       </div>
     </div>
   );
 }
 
-window.RoutesHero = RoutesHero;
+window.IsisPanel = IsisPanel;

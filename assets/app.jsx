@@ -7,7 +7,7 @@ function App() {
   const DEFAULTS = /*EDITMODE-BEGIN*/{
     "accent": "#e38829",
     "mono": false,
-    "dark": true,
+    "dark": false,
     "view": "A"
   }/*EDITMODE-END*/;
 
@@ -15,8 +15,19 @@ function App() {
   const [accent, setAccent] = useStateApp(() => localStorage.getItem("z.accent") || DEFAULTS.accent);
   const [mono, setMono]     = useStateApp(() => localStorage.getItem("z.mono")   === "1" ? true : (localStorage.getItem("z.mono") === "0" ? false : DEFAULTS.mono));
   const [view, setView]     = useStateApp(() => localStorage.getItem("z.view")   || DEFAULTS.view);
+  const [autoPaused, setAutoPaused] = useStateApp(false);
   const [tweaksOpen, setTweaksOpen] = useStateApp(false);
   const [editMode, setEditMode] = useStateApp(false);
+
+  // auto-cycle A→B→C until the user picks a view manually
+  useEffectApp(() => {
+    if (autoPaused) return;
+    const id = setInterval(() => {
+      setView(v => (v === "A" ? "B" : v === "B" ? "C" : "A"));
+    }, 6000);
+    return () => clearInterval(id);
+  }, [autoPaused]);
+  const pickView = (v) => { setAutoPaused(true); setView(v); };
 
   useEffectApp(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -52,9 +63,9 @@ function App() {
     const onKey = (e) => {
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
       if (e.key === "t" || e.key === "T") setTweaksOpen(o => !o);
-      if (e.key === "1") setView("A");
-      if (e.key === "2") setView("B");
-      if (e.key === "3") setView("C");
+      if (e.key === "1") pickView("A");
+      if (e.key === "2") pickView("B");
+      if (e.key === "3") pickView("C");
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -65,12 +76,37 @@ function App() {
       <div className="grid-bg" />
       <Header mono={mono} dark={dark} onToggleTheme={() => setDark(d => !d)} />
 
-      <ViewSwitch view={view} setView={setView} />
-
       <main className="container" style={{ paddingTop: 10 }}>
-        {view === "A" && <TerminalHero />}
-        {view === "B" && <RoutesHero />}
-        {view === "C" && <TopologyHero />}
+        <div className="hero-grid">
+          <LeftHero />
+          <div>
+            {view === "A" && <TerminalPanel />}
+            {view === "B" && <IsisPanel />}
+            {view === "C" && <TopologyPanel />}
+            <ViewSwitch view={view} setView={pickView} />
+          </div>
+        </div>
+
+        <section id="news" style={{ paddingTop: 48 }}>
+          <SectionHead eyebrow="news" titleClass="news-title" title="2026/07/07 — First public release of zebra-rs" />
+          <div className="card" style={{ maxWidth: 860 }}>
+            <div className="mono" style={{ fontSize: 12.5, color: "var(--accent)", marginBottom: 12, letterSpacing: ".04em" }}>
+              2026 / 07 / 06
+            </div>
+            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
+              First public release of zebra-rs, a routing stack written from scratch in
+              Rust. The first AI-native implementation, supporting cutting-edge routing
+              protocols including{" "}
+              <span style={{ color: "var(--fg)" }}>SRv6</span>,{" "}
+              <span style={{ color: "var(--fg)" }}>SR-MPLS</span>,{" "}
+              <span style={{ color: "var(--fg)" }}>L3VPN</span>, and{" "}
+              <span style={{ color: "var(--fg)" }}>EVPN</span>. Built on a memory-safe,
+              fully asynchronous core, zebra-rs applies configuration idempotently and
+              exposes its entire routing state to AI agents. Install zebra-rs from{" "}
+              <a href="install.html" style={{ color: "var(--accent)" }}>here</a>.
+            </p>
+          </div>
+        </section>
 
         <section style={{ paddingTop: 48 }}>
           <SectionHead eyebrow="features" title="Built for the modern edge." />
@@ -78,7 +114,7 @@ function App() {
         </section>
 
         <section style={{ paddingTop: 72 }}>
-          <SectionHead eyebrow="protocols" title="Three ideas. One daemon." />
+          <SectionHead eyebrow="protocols" title="Standards, all the way down." />
           <ProtocolsRow />
         </section>
       </main>
@@ -109,15 +145,15 @@ function App() {
   );
 }
 
-function SectionHead({ eyebrow, title }) {
+function SectionHead({ eyebrow, title, titleClass }) {
   return (
     <div style={{ marginBottom: 28 }}>
-      <div className="mono" style={{
+      {eyebrow && <div className="mono" style={{
         fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase",
         color: "var(--fg-muted)", marginBottom: 10,
-      }}>— {eyebrow}</div>
-      <h2 style={{
-        margin: 0, fontSize: "clamp(26px, 3vw, 36px)", fontWeight: 600,
+      }}>— {eyebrow}</div>}
+      <h2 className={titleClass || ""} style={{
+        margin: 0, fontSize: "clamp(26px, 3vw, 36px)", fontWeight: 400,
         letterSpacing: -0.6, maxWidth: 760,
       }}>{title}</h2>
     </div>
