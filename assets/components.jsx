@@ -48,12 +48,13 @@ function Header({ mono, onToggleTheme, dark }) {
             <ZebraLogo size={34} mono={mono} intro />
             <span className="brand-word" style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
           </a>
-          <a href="https://github.com/zebra-rs/zebra-rs/releases/tag/v26.7.1" target="_blank" rel="noopener" className="pill mono brand-pill" title="Release notes — v26.7.1">
-            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.7.1
+          <a href="https://github.com/zebra-rs/zebra-rs/releases/tag/v26.7.3" target="_blank" rel="noopener" className="pill mono brand-pill" title="Release notes — v26.7.3">
+            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.7.3
           </a>
         </div>
         <nav className="site-nav">
           <a className="nav-link nav-link-secondary" href="install.html" style={{ color: "var(--fg-soft)" }}>install</a>
+          <a className="nav-link nav-link-secondary" href="playset.html" style={{ color: "var(--fg-soft)" }}>playset</a>
           <a className="nav-link" href="docs.html" style={{ color: "var(--fg-soft)" }}>docs</a>
           <a className="nav-link nav-link-secondary" href="protocols.html" style={{ color: "var(--fg-soft)" }}>protocols</a>
           <a href="https://github.com/zebra-rs/zebra-rs" target="_blank" rel="noopener" style={{ color: "var(--fg-soft)", display: "inline-flex", gap: 6, alignItems: "center" }}>
