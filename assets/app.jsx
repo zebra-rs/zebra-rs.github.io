@@ -88,6 +88,29 @@ function App() {
         </div>
 
         <section id="news" style={{ paddingTop: 48 }}>
+          <SectionHead eyebrow="news" titleClass="news-title" title="2026/07/10 — Playset ships with the package" />
+          <div className="card" style={{ maxWidth: 860 }}>
+            <div className="mono" style={{ fontSize: 12.5, color: "var(--accent)", marginBottom: 12, letterSpacing: ".04em" }}>
+              2026 / 07 / 10
+            </div>
+            <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
+              Playset now installs as part of the distribution package — stand up a real
+              multi-node topology and experiment with it on the fly, no extra downloads or
+              build step. Three lab series are included:
+            </p>
+            <ul style={{ margin: "0 0 14px", paddingLeft: 20, fontSize: 15.5, lineHeight: 1.7, color: "var(--fg-soft)" }}>
+              <li><span style={{ color: "var(--fg)" }}>SR-MPLS &amp; SRv6 with TI-LFA fast-reroute</span> — segment routing over both data planes, with sub-second repair of a failed link.</li>
+              <li><span style={{ color: "var(--fg)" }}>BGP EVPN VXLAN</span> — a Layer-2 overlay across an IP fabric with per-tenant VNIs kept isolated.</li>
+              <li><span style={{ color: "var(--fg)" }}>BGP Inter-AS L3VPN</span> — MPLS L3VPN across an AS boundary via the RFC 4364 Option A / B / C models.</li>
+            </ul>
+            <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: "var(--fg-soft)" }}>
+              See the <a href="playset.html" style={{ color: "var(--accent)" }}>playset page</a> for
+              topology diagrams and how to run each lab.
+            </p>
+          </div>
+        </section>
+
+        <section style={{ paddingTop: 48 }}>
           <SectionHead eyebrow="news" titleClass="news-title" title="2026/07/07 — First public release of zebra-rs" />
           <div className="card" style={{ maxWidth: 860 }}>
             <div className="mono" style={{ fontSize: 12.5, color: "var(--accent)", marginBottom: 12, letterSpacing: ".04em" }}>
