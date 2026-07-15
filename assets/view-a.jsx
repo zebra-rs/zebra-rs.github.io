@@ -4,7 +4,7 @@ const { useState: useStateA, useEffect: useEffectA, useRef: useRefA } = React;
 function TerminalPanel() {
   const script = [
     { t: "prompt", text: "zebra > show version" },
-    { t: "out", text: "zebra-rs version v26.7.4 (9e48ac5)" },
+    { t: "out", text: "zebra-rs version v26.7.5 (9e48ac5)" },
     { t: "out", text: "Build Date: 2026-06-22 23:51:42 UTC" },
     { t: "prompt", text: "zebra > configure" },
     { t: "prompt-cfg", text: "zebra # set router bgp global as 65501" },
