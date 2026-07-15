@@ -48,8 +48,8 @@ function Header({ mono, onToggleTheme, dark }) {
             <ZebraLogo size={34} mono={mono} intro />
             <span className="brand-word" style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
           </a>
-          <a href="https://github.com/zebra-rs/zebra-rs/releases/tag/v26.7.5" target="_blank" rel="noopener" className="pill mono brand-pill" title="Release notes — v26.7.5">
-            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.7.5
+          <a href="https://github.com/zebra-rs/zebra-rs/releases/tag/v26.7.6" target="_blank" rel="noopener" className="pill mono brand-pill" title="Release notes — v26.7.6">
+            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.7.6
           </a>
         </div>
         <nav className="site-nav">
