@@ -86,9 +86,10 @@ function DocsApp() {
   const [mono, setMono]     = useStateD(() => localStorage.getItem("z.mono") === "1" ? true : (localStorage.getItem("z.mono") === "0" ? false : DEFAULTS.mono));
   const [query, setQuery]   = useStateD("");
   const [active, setActive] = useStateD(() => {
-    const h = location.hash.replace(/^#/, "");
+    const h = location.hash.replace(/^#/, "").split("/")[0];
     return h || "ch-00-00-introduction";
   });
+  const [pendingSection, setPendingSection] = useStateD(() => location.hash.replace(/^#/, "").split("/")[1] || "");
   const [tocActive, setTocActive] = useStateD("");
   const [expanded, setExpanded] = useStateD({});
 
@@ -98,9 +99,12 @@ function DocsApp() {
 
   useEffectD(() => {
     const onHash = () => {
-      const h = location.hash.replace(/^#/, "").split(/[?#]/)[0];
-      if (h) setActive(h);
-      window.scrollTo({ top: 0, behavior: "instant" });
+      const raw = location.hash.replace(/^#/, "");
+      const chap = raw.split("/")[0];
+      const sec = raw.split("/")[1] || "";
+      if (chap) setActive(chap);
+      setPendingSection(sec);
+      if (!sec) window.scrollTo({ top: 0, behavior: "instant" });
     };
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
@@ -160,13 +164,21 @@ function DocsApp() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [html]);
 
-  // Inject id= onto h2/h3 post-render
+  // Inject id= onto h2/h3 post-render, then honor a pending #chapter/section jump
   useEffectD(() => {
     if (!mainRef.current) return;
     mainRef.current.querySelectorAll("h2, h3").forEach(h => {
       if (!h.id) h.id = slug(h.textContent);
     });
-  }, [html]);
+    if (pendingSection) {
+      const el = document.getElementById(pendingSection);
+      if (el) {
+        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "instant" });
+        setTocActive(pendingSection);
+      }
+      setPendingSection("");
+    }
+  }, [html, pendingSection]);
 
   // Search filter
   const filterNav = (sections) => {
@@ -274,12 +286,14 @@ function DocsApp() {
             {toc.map(h => (
               <li key={h.id}>
                 <a
-                  href={`#${active}`}
+                  href={`#${active}/${h.id}`}
                   className={`l-${h.level} ${tocActive === h.id ? "active" : ""}`}
                   onClick={(e) => {
                     e.preventDefault();
+                    if (history.replaceState) history.replaceState(null, "", `#${active}/${h.id}`);
                     const el = document.getElementById(h.id);
                     if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+                    setTocActive(h.id);
                   }}
                 >{h.text}</a>
               </li>
