@@ -1,7 +1,7 @@
 /* Protocols section — extracted from Appendix B: Supported RFCs and Internet-Drafts.
    Tabbed by protocol area; each area lists its RFC / Internet-Draft entries. */
 
-const { useState: useStateRFC } = React;
+const { useState: useStateRFC, useEffect: useEffectRFC } = React;
 
 const RFC_AREAS = [
   { id: "bgp",     label: "BGP",     col: "var(--z-orange)", rfcs: [
@@ -85,6 +85,15 @@ const RFC_AREAS = [
     ["RFC 9350", "IGP Flexible Algorithm (Flex-Algo) constraint-based SPF."],
     ["RFC 9490", "Topology-Independent Loop-Free Alternate (TI-LFA) fast reroute using Segment Routing."],
   ]},
+  { id: "pim",     label: "PIM",     col: "var(--z-sage)", rfcs: [
+    ["RFC 7761", "Protocol Independent Multicast — Sparse Mode (PIM-SM), the base ASM protocol (shared tree, Register, SPT switch, Assert, DR election) for both IPv4 and IPv6."],
+    ["RFC 4607", "Source-Specific Multicast (SSM) for IP — the 232.0.0.0/8 and FF3x::/32 ranges and source-specific joins."],
+    ["RFC 3376", "Internet Group Management Protocol, Version 3 (IGMPv3) — IPv4 local membership, including source lists."],
+    ["RFC 3810", "Multicast Listener Discovery Version 2 (MLDv2) for IPv6 — the IPv6 local-membership counterpart."],
+    ["RFC 5059", "Bootstrap Router (BSR) Mechanism for PIM — Candidate-BSR election and RP-set flooding."],
+    ["RFC 2362", "PIM-SM (historic) — the group-to-RP hash used to break same-priority RP-set ties consistently across the domain."],
+    ["RFC 3956", "Embedding the Rendezvous Point (RP) Address in an IPv6 Multicast Address (Embedded-RP)."],
+  ]},
   { id: "bfd",     label: "BFD",     col: "var(--z-mint)", rfcs: [
     ["RFC 5880", "Bidirectional Forwarding Detection (BFD) — the base protocol and Echo function."],
     ["RFC 5881", "BFD for IPv4 and IPv6 (single-hop)."],
@@ -137,9 +146,21 @@ const RFC_AREAS = [
 ];
 
 function ProtocolsRFC() {
-  const [active, setActive] = useStateRFC("bgp");
+  const [active, setActive] = useStateRFC(() => {
+    const h = (location.hash || "").replace(/^#/, "");
+    return RFC_AREAS.some(a => a.id === h) ? h : "bgp";
+  });
   const area = RFC_AREAS.find(a => a.id === active);
   const total = RFC_AREAS.reduce((n, a) => n + a.rfcs.length, 0);
+
+  useEffectRFC(() => {
+    const onHash = () => {
+      const h = (location.hash || "").replace(/^#/, "");
+      if (RFC_AREAS.some(a => a.id === h)) setActive(h);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
 
   return (
     <div id="protocols">
