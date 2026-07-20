@@ -88,6 +88,26 @@ function App() {
         </div>
 
         <section id="news" style={{ paddingTop: 48 }}>
+          <SectionHead eyebrow="news" titleClass="news-title" title="2026/07/19 — Welcoming Multicast" />
+          <div className="card" style={{ maxWidth: 860 }}>
+            <div className="mono" style={{ fontSize: 12.5, color: "var(--accent)", marginBottom: 12, letterSpacing: ".04em" }}>
+              2026 / 07 / 19
+            </div>
+            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
+              zebra-rs gains a new protocol family: multicast, with{" "}
+              <span style={{ color: "var(--fg)" }}>PIM-SM</span> and{" "}
+              <span style={{ color: "var(--fg)" }}>PIM-SSM</span> for both IPv4 and IPv6.
+              Beyond regular multicast forwarding, it also serves as the{" "}
+              <span style={{ color: "var(--fg)" }}>EVPN underlay PIM</span> for BUM traffic.
+              See the <a href="docs.html#ch-17-00-pim" style={{ color: "var(--accent)" }}>PIM documentation</a> for
+              PIM configuration, and the{" "}
+              <a href="protocols.html#pim" style={{ color: "var(--accent)" }}>protocols page</a> for
+              the supported multicast RFCs.
+            </p>
+          </div>
+        </section>
+
+        <section style={{ paddingTop: 48 }}>
           <SectionHead eyebrow="news" titleClass="news-title" title="2026/07/10 — Playset ships with the package" />
           <div className="card" style={{ maxWidth: 860 }}>
             <div className="mono" style={{ fontSize: 12.5, color: "var(--accent)", marginBottom: 12, letterSpacing: ".04em" }}>
