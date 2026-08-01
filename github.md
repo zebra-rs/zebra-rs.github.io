@@ -6,20 +6,21 @@ path: book/src
 
 ## Last sync
 
-date: 2026-07-29T15:43:00Z
-commit: 2e06d7ba7d1d
+date: 2026-08-01T18:58:00Z
+commit: ef3ec26d9b63
 
 ### Updated in this project
 
-- Refreshed all 134 book chapters into `book/docs-data.js` (the data file `docs.html` loads).
-- New chapter picked up: `ch-02-40-bgp-evpn-mpls.md` (BGP EVPN over MPLS).
-- Removed the stale `ch-16-00-ebpf.md` left at the project root; cleaned up temp chunk files.
+- Refreshed all 138 book chapters into `book/docs-data.js` (the data file `docs.html` loads).
+- New chapters picked up: VLAN configuration, multi-address, BGP EVPN over SRv6, IS-IS tracing.
+- `ch-16-00-cradle.md` renamed upstream to `ch-16-00-ebpf.md`.
+- Cleaned up temp chunk files and root-level `.md` copies after the rebuild.
 
 ## Screen map
 
 | Screen | Built from |
 | --- | --- |
-| docs.html | `book/src/*.md` (all 134 chapters, via `book/docs-data.js`); sidebar order from `book/src/SUMMARY.md` |
+| docs.html | `book/src/*.md` (all 138 chapters, via `book/docs-data.js`); sidebar order from `book/src/SUMMARY.md` |
 | protocols.html | `book/src/appendix-b-supported-rfcs.md` (mirrored into `assets/rfcs.jsx`) |
 | install.html | `book/src/ch-00-06-install.md`, `book/src/ch-00-07-building.md` |
 | playset.html | repo `playset/` READMEs + `playset/images/*.png` |
@@ -37,4 +38,5 @@ commit: 2e06d7ba7d1d
 
 ## Sync history
 
+- 2026-07-29T15:43:00Z — commit 2e06d7ba7d1d — 134 chapters refreshed.
 - 2026-07-26T02:22:01Z — commit 86b081a3672b — 133 chapters refreshed.
