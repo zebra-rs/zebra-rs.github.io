@@ -48,11 +48,12 @@ function Header({ mono, onToggleTheme, dark }) {
             <ZebraLogo size={34} mono={mono} intro />
             <span className="brand-word" style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
           </a>
-          <a href="https://github.com/zebra-rs/zebra-rs/releases/tag/v26.7.8" target="_blank" rel="noopener" className="pill mono brand-pill" title="Release notes — v26.7.8">
-            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.7.8
+          <a href="https://github.com/zebra-rs/zebra-rs/releases/tag/v26.8.1" target="_blank" rel="noopener" className="pill mono brand-pill" title="Release notes — v26.8.1">
+            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.8.1
           </a>
         </div>
         <nav className="site-nav">
+          <a className="nav-link nav-link-secondary" href="news.html" style={{ color: "var(--fg-soft)" }}>news</a>
           <a className="nav-link nav-link-secondary" href="install.html" style={{ color: "var(--fg-soft)" }}>install</a>
           <a className="nav-link nav-link-secondary" href="playset.html" style={{ color: "var(--fg-soft)" }}>playset</a>
           <a className="nav-link" href="docs.html" style={{ color: "var(--fg-soft)" }}>docs</a>
@@ -444,20 +445,20 @@ function LeftHero() {
   return (
     <div>
       <div className="pill mono" style={{ marginBottom: 20 }}>
-        <span className="dot2" style={{ background: "var(--accent)" }} /> routing, rewritten in Rust
+        <span className="dot2" style={{ background: "var(--accent)" }} /> control plane in Rust · data plane in eBPF
       </div>
       <h1 className="hero-h1" style={{
         fontSize: "clamp(34px, 5.4vw, 64px)", lineHeight: 1.04,
         margin: "0 0 20px", letterSpacing: -1.2, fontWeight: 400,
       }}>
         Routing Software<br />
-        <span style={{ color: "var(--fg-soft)" }}>in the </span>
-        <span className="accent">AI&nbsp;Era.</span>
+        <span style={{ color: "var(--fg-soft)" }}>at </span>
+        <span className="accent">XDP&nbsp;Speed.</span>
       </h1>
       <p style={{
         fontSize: 17, lineHeight: 1.55, color: "var(--fg-soft)",
         maxWidth: 520, margin: "0 0 28px",
-      }}>zebra-rs is a BGP, OSPF, and IS‑IS routing stack with SRv6, SR-MPLS, L3VPN, and EVPN extensions, written from scratch in Rust. Memory‑safe, async to the core, idempotent by design — and the first routing daemon to ship with a native MCP server for AI agents.</p>
+      }}>zebra-rs is a BGP, OSPF, and IS‑IS routing stack with SRv6, SR-MPLS, L3VPN, and EVPN extensions, written from scratch in Rust. Paired with cradle-rs, it programs an XDP/eBPF data plane that forwards L2, L3, MPLS, SRv6, and VXLAN on a vanilla Linux kernel — no out-of-tree modules, no DPDK. Memory‑safe, async to the core, idempotent by design.</p>
       <div className="hero-cta">
         <a className="btn btn-primary" href="install.html">
           Get started
