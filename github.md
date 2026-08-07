@@ -6,12 +6,13 @@ path: book/src
 
 ## Last sync
 
-date: 2026-08-07T14:19:09Z
-commit: 47b3138b6302
+date: 2026-08-07T16:55:00Z
+commit: 7a73d869d267
 
 ### Updated in this project
 
 - Refreshed all 138 book chapters into `book/docs-data.js` (the data file `docs.html` loads).
+- Picks up the latest BGP MUP chapter revisions (`ch-02-35-bgp-mup.md`).
 - Cleaned up temp chunk files and root-level `.md` copies after the rebuild.
 
 ## Screen map
@@ -36,6 +37,7 @@ commit: 47b3138b6302
 
 ## Sync history
 
+- 2026-08-07T14:19:09Z — commit 47b3138b6302 — 138 chapters refreshed.
 - 2026-08-01T18:58:00Z — commit ef3ec26d9b63 — 138 chapters; added VLAN config, multi-address, BGP EVPN over SRv6, IS-IS tracing.
 - 2026-07-29T15:43:00Z — commit 2e06d7ba7d1d — 134 chapters refreshed.
 - 2026-07-26T02:22:01Z — commit 86b081a3672b — 133 chapters refreshed.
