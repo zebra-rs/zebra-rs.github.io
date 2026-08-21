@@ -1,0 +1,81 @@
+{
+  "routers": [
+    {
+      "fullName": "Seattle",
+      "lat": 47.6062,
+      "lng": -122.3321,
+      "name": "se",
+      "region": "US"
+    },
+    {
+      "fullName": "San Jose",
+      "lat": 37.3382,
+      "lng": -121.8863,
+      "name": "sj",
+      "region": "US"
+    },
+    {
+      "fullName": "Chicago",
+      "lat": 41.8781,
+      "lng": -87.6298,
+      "name": "ch",
+      "region": "US"
+    },
+    {
+      "fullName": "Dallas",
+      "lat": 32.7767,
+      "lng": -96.797,
+      "name": "da",
+      "region": "US"
+    },
+    {
+      "fullName": "Virginia",
+      "lat": 39.0438,
+      "lng": -77.4874,
+      "name": "va",
+      "region": "US"
+    },
+    {
+      "fullName": "Atlanta",
+      "lat": 33.749,
+      "lng": -84.388,
+      "name": "at",
+      "region": "US"
+    },
+    {
+      "fullName": "London",
+      "lat": 51.5074,
+      "lng": -0.1278,
+      "name": "ln",
+      "region": "EU"
+    },
+    {
+      "fullName": "Frankfurt",
+      "lat": 50.1109,
+      "lng": 8.6821,
+      "name": "fr",
+      "region": "EU"
+    },
+    {
+      "fullName": "Singapore",
+      "lat": 1.3521,
+      "lng": 103.8198,
+      "name": "sg",
+      "region": "AP"
+    },
+    {
+      "fullName": "Sydney",
+      "lat": -33.8688,
+      "lng": 151.2093,
+      "name": "sy",
+      "region": "AP"
+    },
+    {
+      "fullName": "Tokyo",
+      "lat": 35.6762,
+      "lng": 139.6503,
+      "name": "tk",
+      "region": "AP"
+    }
+  ]
+}
