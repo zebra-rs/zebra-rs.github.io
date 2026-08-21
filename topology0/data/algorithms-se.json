@@ -1,0 +1,8 @@
+{
+  "algorithms": [
+    {
+      "algo": 0,
+      "label": "0 — shortest path (unconstrained SPF)"
+    }
+  ]
+}

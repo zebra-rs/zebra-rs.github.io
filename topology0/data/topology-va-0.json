@@ -1,0 +1,338 @@
+{
+  "algorithm": 0,
+  "edges": [
+    {
+      "cost": 10,
+      "source": "va",
+      "target": "ch"
+    },
+    {
+      "cost": 10,
+      "source": "va",
+      "target": "at"
+    },
+    {
+      "cost": 10,
+      "source": "va",
+      "target": "fr"
+    },
+    {
+      "cost": 10,
+      "source": "se",
+      "target": "sg"
+    },
+    {
+      "cost": 10,
+      "source": "se",
+      "target": "sj"
+    },
+    {
+      "cost": 10,
+      "source": "se",
+      "target": "ch"
+    },
+    {
+      "cost": 10,
+      "source": "sj",
+      "target": "sy"
+    },
+    {
+      "cost": 10,
+      "source": "sj",
+      "target": "da"
+    },
+    {
+      "cost": 10,
+      "source": "sj",
+      "target": "ch"
+    },
+    {
+      "cost": 10,
+      "source": "sj",
+      "target": "tk"
+    },
+    {
+      "cost": 10,
+      "source": "ch",
+      "target": "da"
+    },
+    {
+      "cost": 10,
+      "source": "ch",
+      "target": "ln"
+    },
+    {
+      "cost": 10,
+      "source": "da",
+      "target": "at"
+    },
+    {
+      "cost": 10,
+      "source": "ln",
+      "target": "fr"
+    },
+    {
+      "cost": 10,
+      "source": "fr",
+      "target": "sg"
+    },
+    {
+      "cost": 10,
+      "source": "sg",
+      "target": "tk"
+    },
+    {
+      "cost": 10,
+      "source": "sg",
+      "target": "sy"
+    }
+  ],
+  "nodes": [
+    {
+      "active": true,
+      "fullName": "Seattle",
+      "lat": 47.6062,
+      "lng": -122.3321,
+      "name": "se",
+      "region": "US"
+    },
+    {
+      "active": true,
+      "fullName": "San Jose",
+      "lat": 37.3382,
+      "lng": -121.8863,
+      "name": "sj",
+      "region": "US"
+    },
+    {
+      "active": true,
+      "fullName": "Chicago",
+      "lat": 41.8781,
+      "lng": -87.6298,
+      "name": "ch",
+      "region": "US"
+    },
+    {
+      "active": true,
+      "fullName": "Dallas",
+      "lat": 32.7767,
+      "lng": -96.797,
+      "name": "da",
+      "region": "US"
+    },
+    {
+      "active": true,
+      "fullName": "Virginia",
+      "lat": 39.0438,
+      "lng": -77.4874,
+      "name": "va",
+      "region": "US"
+    },
+    {
+      "active": true,
+      "fullName": "Atlanta",
+      "lat": 33.749,
+      "lng": -84.388,
+      "name": "at",
+      "region": "US"
+    },
+    {
+      "active": true,
+      "fullName": "London",
+      "lat": 51.5074,
+      "lng": -0.1278,
+      "name": "ln",
+      "region": "EU"
+    },
+    {
+      "active": true,
+      "fullName": "Frankfurt",
+      "lat": 50.1109,
+      "lng": 8.6821,
+      "name": "fr",
+      "region": "EU"
+    },
+    {
+      "active": true,
+      "fullName": "Singapore",
+      "lat": 1.3521,
+      "lng": 103.8198,
+      "name": "sg",
+      "region": "AP"
+    },
+    {
+      "active": true,
+      "fullName": "Sydney",
+      "lat": -33.8688,
+      "lng": 151.2093,
+      "name": "sy",
+      "region": "AP"
+    },
+    {
+      "active": true,
+      "fullName": "Tokyo",
+      "lat": 35.6762,
+      "lng": 139.6503,
+      "name": "tk",
+      "region": "AP"
+    }
+  ],
+  "paths": [
+    {
+      "cost": 20,
+      "destination": "se",
+      "hops": [
+        "va",
+        "ch",
+        "se"
+      ],
+      "index": 0,
+      "interface": "va-ch"
+    },
+    {
+      "cost": 20,
+      "destination": "sj",
+      "hops": [
+        "va",
+        "ch",
+        "sj"
+      ],
+      "index": 1,
+      "interface": "va-ch"
+    },
+    {
+      "cost": 10,
+      "destination": "ch",
+      "hops": [
+        "va",
+        "ch"
+      ],
+      "index": 2,
+      "interface": "va-ch"
+    },
+    {
+      "cost": 20,
+      "destination": "da",
+      "hops": [
+        "va",
+        "ch",
+        "da"
+      ],
+      "index": 3,
+      "interface": "va-ch"
+    },
+    {
+      "cost": 20,
+      "destination": "da",
+      "hops": [
+        "va",
+        "at",
+        "da"
+      ],
+      "index": 4,
+      "interface": "va-at"
+    },
+    {
+      "cost": 10,
+      "destination": "at",
+      "hops": [
+        "va",
+        "at"
+      ],
+      "index": 5,
+      "interface": "va-at"
+    },
+    {
+      "cost": 20,
+      "destination": "ln",
+      "hops": [
+        "va",
+        "ch",
+        "ln"
+      ],
+      "index": 6,
+      "interface": "va-ch"
+    },
+    {
+      "cost": 20,
+      "destination": "ln",
+      "hops": [
+        "va",
+        "fr",
+        "ln"
+      ],
+      "index": 7,
+      "interface": "va-fr"
+    },
+    {
+      "cost": 10,
+      "destination": "fr",
+      "hops": [
+        "va",
+        "fr"
+      ],
+      "index": 8,
+      "interface": "va-fr"
+    },
+    {
+      "cost": 20,
+      "destination": "sg",
+      "hops": [
+        "va",
+        "fr",
+        "sg"
+      ],
+      "index": 9,
+      "interface": "va-fr"
+    },
+    {
+      "cost": 30,
+      "destination": "sy",
+      "hops": [
+        "va",
+        "ch",
+        "sj",
+        "sy"
+      ],
+      "index": 10,
+      "interface": "va-ch"
+    },
+    {
+      "cost": 30,
+      "destination": "sy",
+      "hops": [
+        "va",
+        "fr",
+        "sg",
+        "sy"
+      ],
+      "index": 11,
+      "interface": "va-fr"
+    },
+    {
+      "cost": 30,
+      "destination": "tk",
+      "hops": [
+        "va",
+        "ch",
+        "sj",
+        "tk"
+      ],
+      "index": 12,
+      "interface": "va-ch"
+    },
+    {
+      "cost": 30,
+      "destination": "tk",
+      "hops": [
+        "va",
+        "fr",
+        "sg",
+        "tk"
+      ],
+      "index": 13,
+      "interface": "va-fr"
+    }
+  ],
+  "source": "va"
+}
