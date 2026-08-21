@@ -82,7 +82,13 @@ function App() {
           <div>
             {view === "A" && <TerminalPanel />}
             {view === "B" && <IsisPanel />}
-            {view === "C" && <TopologyPanel />}
+            {/* The topology panel stays mounted (hidden, not unmounted)
+                so its iframe boots once — on the panel's first showing,
+                never inside display:none — instead of reloading the
+                globe on every A→B→C cycle. Engaging pauses the cycle. */}
+            <div style={{ display: view === "C" ? "block" : "none" }}>
+              <TopologyPanel active={view === "C"} onEngage={() => pickView("C")} />
+            </div>
             <ViewSwitch view={view} setView={pickView} />
           </div>
         </div>
