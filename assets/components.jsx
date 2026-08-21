@@ -420,7 +420,7 @@ function ViewSwitch({ view, setView }) {
   const views = [
     ["A", "terminal"],
     ["B", "topology"],
-    ["C", "traceroute"],
+    ["C", "globe"],
   ];
   return (
     <div className="view-switch">
