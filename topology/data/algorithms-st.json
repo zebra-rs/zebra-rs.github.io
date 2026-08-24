@@ -1,0 +1,12 @@
+{
+  "algorithms": [
+    {
+      "algo": 0,
+      "label": "0 — shortest path (unconstrained SPF)"
+    },
+    {
+      "algo": 128,
+      "label": "128 — exclude-any: pacific"
+    }
+  ]
+}
