@@ -419,9 +419,9 @@ function TweaksPanel({ open, mono, setMono, accent, setAccent, onClose }) {
 /* ─────────────────────────── View switch ─────────────────────────── */
 function ViewSwitch({ view, setView }) {
   const views = [
-    ["A", "terminal"],
-    ["B", "topology"],
-    ["C", "traceroute"],
+    ["A", "ontology"],
+    ["B", "terminal"],
+    ["C", "topology"],
   ];
   return (
     <div className="view-switch">
@@ -446,20 +446,19 @@ function LeftHero() {
   return (
     <div>
       <div className="pill mono" style={{ marginBottom: 20 }}>
-        <span className="dot2" style={{ background: "var(--accent)" }} /> control plane in Rust · data plane in eBPF
+        <span className="dot2" style={{ background: "var(--accent)" }} /> ontology-driven · agent-ready
       </div>
       <h1 className="hero-h1" style={{
         fontSize: "clamp(34px, 5.4vw, 64px)", lineHeight: 1.04,
         margin: "0 0 20px", letterSpacing: -1.2, fontWeight: 400,
       }}>
-        Routing Software<br />
-        <span style={{ color: "var(--fg-soft)" }}>at </span>
-        <span className="accent">XDP&nbsp;Speed.</span>
+        AI, Ontology<br />
+        <span className="accent">and&nbsp;Networking.</span>
       </h1>
       <p style={{
         fontSize: 17, lineHeight: 1.55, color: "var(--fg-soft)",
         maxWidth: 520, margin: "0 0 28px",
-      }}>zebra-rs is a BGP, OSPF, and IS‑IS routing stack with SRv6, SR-MPLS, L3VPN, and EVPN extensions, written from scratch in Rust. Paired with cradle-rs, it programs an XDP/eBPF data plane that forwards L2, L3, MPLS, SRv6, and VXLAN on a vanilla Linux kernel — no out-of-tree modules, no DPDK. Memory‑safe, async to the core, idempotent by design.</p>
+      }}>zebra-rs is a BGP, OSPF, and IS‑IS routing stack with SRv6, SR-MPLS, L3VPN, and EVPN extensions, written from scratch in Rust. It exposes the network to AI agents as an ontology — nodes, links, and the vocabulary that connects an attribute to an intent — over a native MCP server, so an agent can reason about your fabric instead of guessing at it. Memory‑safe, async to the core, idempotent by design.</p>
       <div className="hero-cta">
         <a className="btn btn-primary" href="install.html">
           Get started
