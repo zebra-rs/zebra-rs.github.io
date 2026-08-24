@@ -421,6 +421,7 @@ function ViewSwitch({ view, setView }) {
     ["A", "terminal"],
     ["B", "topology"],
     ["C", "traceroute"],
+    ["D", "spf0"],
   ];
   return (
     <div className="view-switch">
