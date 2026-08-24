@@ -209,284 +209,187 @@
   "paths": [
     {
       "cost": 10,
-      "destination": "at",
+      "destination": "ba",
       "hops": [
-        "da",
-        "at"
+        "st",
+        "ba"
       ],
       "index": 0,
-      "interface": "da-at"
-    },
-    {
-      "cost": 10,
-      "destination": "ch",
-      "hops": [
-        "da",
-        "ch"
-      ],
-      "index": 1,
-      "interface": "da-ch"
-    },
-    {
-      "cost": 10,
-      "destination": "sj",
-      "hops": [
-        "da",
-        "sj"
-      ],
-      "index": 2,
-      "interface": "da-sj"
-    },
-    {
-      "cost": 20,
-      "destination": "ln",
-      "hops": [
-        "da",
-        "ch",
-        "ln"
-      ],
-      "index": 3,
-      "interface": "da-ch"
-    },
-    {
-      "cost": 20,
-      "destination": "se",
-      "hops": [
-        "da",
-        "ch",
-        "se"
-      ],
-      "index": 4,
-      "interface": "da-ch"
-    },
-    {
-      "cost": 20,
-      "destination": "se",
-      "hops": [
-        "da",
-        "sj",
-        "se"
-      ],
-      "index": 5,
-      "interface": "da-sj"
+      "interface": "st-ba"
     },
     {
       "cost": 20,
       "destination": "sp",
       "hops": [
-        "da",
-        "at",
+        "st",
+        "ba",
         "sp"
       ],
-      "index": 6,
-      "interface": "da-at"
+      "index": 1,
+      "interface": "st-ba"
     },
     {
-      "cost": 20,
+      "cost": 30,
+      "destination": "at",
+      "hops": [
+        "st",
+        "ba",
+        "sp",
+        "at"
+      ],
+      "index": 2,
+      "interface": "st-ba"
+    },
+    {
+      "cost": 30,
+      "destination": "ln",
+      "hops": [
+        "st",
+        "ba",
+        "sp",
+        "ln"
+      ],
+      "index": 3,
+      "interface": "st-ba"
+    },
+    {
+      "cost": 40,
+      "destination": "ch",
+      "hops": [
+        "st",
+        "ba",
+        "sp",
+        "ln",
+        "ch"
+      ],
+      "index": 4,
+      "interface": "st-ba"
+    },
+    {
+      "cost": 40,
+      "destination": "da",
+      "hops": [
+        "st",
+        "ba",
+        "sp",
+        "at",
+        "da"
+      ],
+      "index": 5,
+      "interface": "st-ba"
+    },
+    {
+      "cost": 40,
+      "destination": "fr",
+      "hops": [
+        "st",
+        "ba",
+        "sp",
+        "ln",
+        "fr"
+      ],
+      "index": 6,
+      "interface": "st-ba"
+    },
+    {
+      "cost": 40,
       "destination": "va",
       "hops": [
-        "da",
+        "st",
+        "ba",
+        "sp",
         "at",
         "va"
       ],
       "index": 7,
-      "interface": "da-at"
+      "interface": "st-ba"
     },
     {
-      "cost": 20,
-      "destination": "va",
+      "cost": 50,
+      "destination": "se",
       "hops": [
-        "da",
+        "st",
+        "ba",
+        "sp",
+        "ln",
         "ch",
-        "va"
+        "se"
       ],
       "index": 8,
-      "interface": "da-ch"
+      "interface": "st-ba"
     },
     {
-      "cost": 30,
-      "destination": "ba",
+      "cost": 50,
+      "destination": "sg",
       "hops": [
-        "da",
-        "at",
+        "st",
+        "ba",
         "sp",
-        "ba"
+        "ln",
+        "fr",
+        "sg"
       ],
       "index": 9,
-      "interface": "da-at"
+      "interface": "st-ba"
     },
     {
-      "cost": 30,
-      "destination": "fr",
+      "cost": 50,
+      "destination": "sj",
       "hops": [
-        "da",
+        "st",
+        "ba",
+        "sp",
         "at",
-        "va",
-        "fr"
+        "da",
+        "sj"
       ],
       "index": 10,
-      "interface": "da-at"
+      "interface": "st-ba"
     },
     {
-      "cost": 30,
-      "destination": "fr",
+      "cost": 50,
+      "destination": "sj",
       "hops": [
-        "da",
-        "ch",
+        "st",
+        "ba",
+        "sp",
         "ln",
-        "fr"
+        "ch",
+        "sj"
       ],
       "index": 11,
-      "interface": "da-ch"
+      "interface": "st-ba"
     },
     {
-      "cost": 30,
-      "destination": "fr",
+      "cost": 60,
+      "destination": "sy",
       "hops": [
-        "da",
-        "ch",
-        "va",
-        "fr"
+        "st",
+        "ba",
+        "sp",
+        "ln",
+        "fr",
+        "sg",
+        "sy"
       ],
       "index": 12,
-      "interface": "da-ch"
+      "interface": "st-ba"
     },
     {
-      "cost": 40,
-      "destination": "sg",
+      "cost": 60,
+      "destination": "tk",
       "hops": [
-        "da",
-        "at",
-        "va",
+        "st",
+        "ba",
+        "sp",
+        "ln",
         "fr",
-        "sg"
+        "sg",
+        "tk"
       ],
       "index": 13,
-      "interface": "da-at"
-    },
-    {
-      "cost": 40,
-      "destination": "sg",
-      "hops": [
-        "da",
-        "ch",
-        "ln",
-        "fr",
-        "sg"
-      ],
-      "index": 14,
-      "interface": "da-ch"
-    },
-    {
-      "cost": 40,
-      "destination": "sg",
-      "hops": [
-        "da",
-        "ch",
-        "va",
-        "fr",
-        "sg"
-      ],
-      "index": 15,
-      "interface": "da-ch"
-    },
-    {
-      "cost": 40,
-      "destination": "st",
-      "hops": [
-        "da",
-        "at",
-        "sp",
-        "ba",
-        "st"
-      ],
-      "index": 16,
-      "interface": "da-at"
-    },
-    {
-      "cost": 50,
-      "destination": "sy",
-      "hops": [
-        "da",
-        "at",
-        "va",
-        "fr",
-        "sg",
-        "sy"
-      ],
-      "index": 17,
-      "interface": "da-at"
-    },
-    {
-      "cost": 50,
-      "destination": "sy",
-      "hops": [
-        "da",
-        "ch",
-        "ln",
-        "fr",
-        "sg",
-        "sy"
-      ],
-      "index": 18,
-      "interface": "da-ch"
-    },
-    {
-      "cost": 50,
-      "destination": "sy",
-      "hops": [
-        "da",
-        "ch",
-        "va",
-        "fr",
-        "sg",
-        "sy"
-      ],
-      "index": 19,
-      "interface": "da-ch"
-    },
-    {
-      "cost": 50,
-      "destination": "tk",
-      "hops": [
-        "da",
-        "at",
-        "va",
-        "fr",
-        "sg",
-        "tk"
-      ],
-      "index": 20,
-      "interface": "da-at"
-    },
-    {
-      "cost": 50,
-      "destination": "tk",
-      "hops": [
-        "da",
-        "ch",
-        "ln",
-        "fr",
-        "sg",
-        "tk"
-      ],
-      "index": 21,
-      "interface": "da-ch"
-    },
-    {
-      "cost": 50,
-      "destination": "tk",
-      "hops": [
-        "da",
-        "ch",
-        "va",
-        "fr",
-        "sg",
-        "tk"
-      ],
-      "index": 22,
-      "interface": "da-ch"
+      "interface": "st-ba"
     }
   ],
-  "source": "da"
+  "source": "st"
 }
