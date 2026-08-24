@@ -53,6 +53,7 @@ function Header({ mono, onToggleTheme, dark }) {
           </a>
         </div>
         <nav className="site-nav">
+          <a className="nav-link nav-link-secondary" href="ai.html" style={{ color: "var(--fg-soft)" }}>AI</a>
           <a className="nav-link nav-link-secondary" href="news.html" style={{ color: "var(--fg-soft)" }}>news</a>
           <a className="nav-link nav-link-secondary" href="install.html" style={{ color: "var(--fg-soft)" }}>install</a>
           <a className="nav-link nav-link-secondary" href="playset.html" style={{ color: "var(--fg-soft)" }}>playset</a>
@@ -421,7 +422,6 @@ function ViewSwitch({ view, setView }) {
     ["A", "terminal"],
     ["B", "topology"],
     ["C", "traceroute"],
-    ["D", "fleet"],
   ];
   return (
     <div className="view-switch">
