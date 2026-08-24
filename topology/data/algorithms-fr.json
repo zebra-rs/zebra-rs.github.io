@@ -6,7 +6,7 @@
     },
     {
       "algo": 128,
-      "label": "128 — flex-algo"
+      "label": "128 — exclude-any: pacific"
     }
   ]
 }

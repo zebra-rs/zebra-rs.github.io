@@ -19,11 +19,6 @@
     {
       "cost": 10,
       "source": "se",
-      "target": "sg"
-    },
-    {
-      "cost": 10,
-      "source": "se",
       "target": "sj"
     },
     {
@@ -33,23 +28,8 @@
     },
     {
       "cost": 10,
-      "source": "sj",
-      "target": "sy"
-    },
-    {
-      "cost": 10,
-      "source": "sj",
-      "target": "da"
-    },
-    {
-      "cost": 10,
-      "source": "sj",
-      "target": "ch"
-    },
-    {
-      "cost": 10,
-      "source": "sj",
-      "target": "tk"
+      "source": "ch",
+      "target": "sj"
     },
     {
       "cost": 10,
@@ -63,18 +43,23 @@
     },
     {
       "cost": 10,
-      "source": "da",
-      "target": "at"
+      "source": "at",
+      "target": "da"
     },
     {
       "cost": 10,
-      "source": "ln",
-      "target": "fr"
+      "source": "fr",
+      "target": "ln"
     },
     {
       "cost": 10,
       "source": "fr",
       "target": "sg"
+    },
+    {
+      "cost": 10,
+      "source": "sj",
+      "target": "da"
     },
     {
       "cost": 10,
@@ -190,6 +175,36 @@
       "interface": "va-ch"
     },
     {
+      "cost": 10,
+      "destination": "ch",
+      "hops": [
+        "va",
+        "ch"
+      ],
+      "index": 1,
+      "interface": "va-ch"
+    },
+    {
+      "cost": 10,
+      "destination": "at",
+      "hops": [
+        "va",
+        "at"
+      ],
+      "index": 2,
+      "interface": "va-at"
+    },
+    {
+      "cost": 10,
+      "destination": "fr",
+      "hops": [
+        "va",
+        "fr"
+      ],
+      "index": 3,
+      "interface": "va-fr"
+    },
+    {
       "cost": 20,
       "destination": "sj",
       "hops": [
@@ -197,17 +212,7 @@
         "ch",
         "sj"
       ],
-      "index": 1,
-      "interface": "va-ch"
-    },
-    {
-      "cost": 10,
-      "destination": "ch",
-      "hops": [
-        "va",
-        "ch"
-      ],
-      "index": 2,
+      "index": 4,
       "interface": "va-ch"
     },
     {
@@ -218,7 +223,7 @@
         "ch",
         "da"
       ],
-      "index": 3,
+      "index": 5,
       "interface": "va-ch"
     },
     {
@@ -229,17 +234,7 @@
         "at",
         "da"
       ],
-      "index": 4,
-      "interface": "va-at"
-    },
-    {
-      "cost": 10,
-      "destination": "at",
-      "hops": [
-        "va",
-        "at"
-      ],
-      "index": 5,
+      "index": 6,
       "interface": "va-at"
     },
     {
@@ -250,7 +245,7 @@
         "ch",
         "ln"
       ],
-      "index": 6,
+      "index": 7,
       "interface": "va-ch"
     },
     {
@@ -260,16 +255,6 @@
         "va",
         "fr",
         "ln"
-      ],
-      "index": 7,
-      "interface": "va-fr"
-    },
-    {
-      "cost": 10,
-      "destination": "fr",
-      "hops": [
-        "va",
-        "fr"
       ],
       "index": 8,
       "interface": "va-fr"
@@ -290,23 +275,11 @@
       "destination": "sy",
       "hops": [
         "va",
-        "ch",
-        "sj",
-        "sy"
-      ],
-      "index": 10,
-      "interface": "va-ch"
-    },
-    {
-      "cost": 30,
-      "destination": "sy",
-      "hops": [
-        "va",
         "fr",
         "sg",
         "sy"
       ],
-      "index": 11,
+      "index": 10,
       "interface": "va-fr"
     },
     {
@@ -314,23 +287,11 @@
       "destination": "tk",
       "hops": [
         "va",
-        "ch",
-        "sj",
-        "tk"
-      ],
-      "index": 12,
-      "interface": "va-ch"
-    },
-    {
-      "cost": 30,
-      "destination": "tk",
-      "hops": [
-        "va",
         "fr",
         "sg",
         "tk"
       ],
-      "index": 13,
+      "index": 11,
       "interface": "va-fr"
     }
   ],
