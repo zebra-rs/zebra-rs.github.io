@@ -8,13 +8,8 @@
     },
     {
       "cost": 10,
-      "source": "se",
-      "target": "sj"
-    },
-    {
-      "cost": 10,
-      "source": "se",
-      "target": "ch"
+      "source": "sj",
+      "target": "se"
     },
     {
       "cost": 10,
@@ -24,6 +19,21 @@
     {
       "cost": 10,
       "source": "sj",
+      "target": "ch"
+    },
+    {
+      "cost": 10,
+      "source": "sg",
+      "target": "fr"
+    },
+    {
+      "cost": 10,
+      "source": "sg",
+      "target": "sy"
+    },
+    {
+      "cost": 10,
+      "source": "se",
       "target": "ch"
     },
     {
@@ -48,28 +58,18 @@
     },
     {
       "cost": 10,
-      "source": "va",
-      "target": "at"
-    },
-    {
-      "cost": 10,
-      "source": "va",
-      "target": "fr"
-    },
-    {
-      "cost": 10,
-      "source": "ln",
-      "target": "fr"
+      "source": "fr",
+      "target": "va"
     },
     {
       "cost": 10,
       "source": "fr",
-      "target": "sg"
+      "target": "ln"
     },
     {
       "cost": 10,
-      "source": "sg",
-      "target": "sy"
+      "source": "va",
+      "target": "at"
     }
   ],
   "nodes": [
@@ -165,20 +165,58 @@
   "paths": [
     {
       "cost": 50,
-      "destination": "se",
+      "destination": "sj",
       "hops": [
         "tk",
         "sg",
         "fr",
         "va",
         "ch",
-        "se"
+        "sj"
       ],
       "index": 0,
       "interface": "tk-sg"
     },
     {
       "cost": 50,
+      "destination": "sj",
+      "hops": [
+        "tk",
+        "sg",
+        "fr",
+        "ln",
+        "ch",
+        "sj"
+      ],
+      "index": 1,
+      "interface": "tk-sg"
+    },
+    {
+      "cost": 10,
+      "destination": "sg",
+      "hops": [
+        "tk",
+        "sg"
+      ],
+      "index": 2,
+      "interface": "tk-sg"
+    },
+    {
+      "cost": 50,
+      "destination": "se",
+      "hops": [
+        "tk",
+        "sg",
+        "fr",
+        "va",
+        "ch",
+        "se"
+      ],
+      "index": 3,
+      "interface": "tk-sg"
+    },
+    {
+      "cost": 50,
       "destination": "se",
       "hops": [
         "tk",
@@ -187,47 +225,6 @@
         "ln",
         "ch",
         "se"
-      ],
-      "index": 1,
-      "interface": "tk-sg"
-    },
-    {
-      "cost": 50,
-      "destination": "sj",
-      "hops": [
-        "tk",
-        "sg",
-        "fr",
-        "va",
-        "ch",
-        "sj"
-      ],
-      "index": 2,
-      "interface": "tk-sg"
-    },
-    {
-      "cost": 50,
-      "destination": "sj",
-      "hops": [
-        "tk",
-        "sg",
-        "fr",
-        "ln",
-        "ch",
-        "sj"
-      ],
-      "index": 3,
-      "interface": "tk-sg"
-    },
-    {
-      "cost": 40,
-      "destination": "ch",
-      "hops": [
-        "tk",
-        "sg",
-        "fr",
-        "va",
-        "ch"
       ],
       "index": 4,
       "interface": "tk-sg"
@@ -239,22 +236,21 @@
         "tk",
         "sg",
         "fr",
-        "ln",
+        "va",
         "ch"
       ],
       "index": 5,
       "interface": "tk-sg"
     },
     {
-      "cost": 50,
-      "destination": "da",
+      "cost": 40,
+      "destination": "ch",
       "hops": [
         "tk",
         "sg",
         "fr",
-        "va",
-        "ch",
-        "da"
+        "ln",
+        "ch"
       ],
       "index": 6,
       "interface": "tk-sg"
@@ -266,7 +262,7 @@
         "tk",
         "sg",
         "fr",
-        "ln",
+        "va",
         "ch",
         "da"
       ],
@@ -280,35 +276,25 @@
         "tk",
         "sg",
         "fr",
-        "va",
-        "at",
+        "ln",
+        "ch",
         "da"
       ],
       "index": 8,
       "interface": "tk-sg"
     },
     {
-      "cost": 30,
-      "destination": "va",
+      "cost": 50,
+      "destination": "da",
       "hops": [
         "tk",
         "sg",
         "fr",
-        "va"
+        "va",
+        "at",
+        "da"
       ],
       "index": 9,
-      "interface": "tk-sg"
-    },
-    {
-      "cost": 30,
-      "destination": "ln",
-      "hops": [
-        "tk",
-        "sg",
-        "fr",
-        "ln"
-      ],
-      "index": 10,
       "interface": "tk-sg"
     },
     {
@@ -319,15 +305,28 @@
         "sg",
         "fr"
       ],
+      "index": 10,
+      "interface": "tk-sg"
+    },
+    {
+      "cost": 20,
+      "destination": "sy",
+      "hops": [
+        "tk",
+        "sg",
+        "sy"
+      ],
       "index": 11,
       "interface": "tk-sg"
     },
     {
-      "cost": 10,
-      "destination": "sg",
+      "cost": 30,
+      "destination": "va",
       "hops": [
         "tk",
-        "sg"
+        "sg",
+        "fr",
+        "va"
       ],
       "index": 12,
       "interface": "tk-sg"
@@ -346,12 +345,13 @@
       "interface": "tk-sg"
     },
     {
-      "cost": 20,
-      "destination": "sy",
+      "cost": 30,
+      "destination": "ln",
       "hops": [
         "tk",
         "sg",
-        "sy"
+        "fr",
+        "ln"
       ],
       "index": 14,
       "interface": "tk-sg"
