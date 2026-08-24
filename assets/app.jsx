@@ -23,7 +23,7 @@ function App() {
   useEffectApp(() => {
     if (autoPaused) return;
     const id = setInterval(() => {
-      setView(v => (v === "A" ? "B" : v === "B" ? "C" : v === "C" ? "D" : "A"));
+      setView(v => (v === "A" ? "B" : v === "B" ? "C" : "A"));
     }, 6000);
     return () => clearInterval(id);
   }, [autoPaused]);
@@ -66,14 +66,13 @@ function App() {
       if (e.key === "1") pickView("A");
       if (e.key === "2") pickView("B");
       if (e.key === "3") pickView("C");
-      if (e.key === "4") pickView("D");
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   return (
-    <div data-screen-label={`0${view === "A" ? 1 : view === "B" ? 2 : view === "C" ? 3 : 4} ${view}`} style={{ position: "relative", zIndex: 1 }}>
+    <div data-screen-label={`0${view === "A" ? 1 : view === "B" ? 2 : 3} ${view}`} style={{ position: "relative", zIndex: 1 }}>
       <div className="grid-bg" />
       <Header mono={mono} dark={dark} onToggleTheme={() => setDark(d => !d)} />
 
@@ -81,46 +80,49 @@ function App() {
         <div className="hero-grid">
           <LeftHero />
           <div>
-            {view === "A" && <TerminalPanel />}
-            {view === "B" && <IsisPanel />}
-            {view === "C" && <TopologyPanel />}
-            {view === "D" && <IsisFleetPanel />}
+            {view === "A" && <OntologyPanel />}
+            {view === "B" && <TerminalPanel />}
+            {view === "C" && <IsisPanel />}
             <ViewSwitch view={view} setView={pickView} />
           </div>
         </div>
 
         <section id="news" style={{ paddingTop: 48 }}>
-          <SectionHead eyebrow="news" titleClass="news-title" title="2026/08/01 — XDP/eBPF forwarder" />
+          <SectionHead eyebrow="news" titleClass="news-title" title="2026/08/23 — AI, Ontology and Networking" />
           <div className="card" style={{ maxWidth: 860 }}>
             <div className="mono" style={{ fontSize: 12.5, color: "var(--accent)", marginBottom: 12, letterSpacing: ".04em" }}>
-              2026 / 08 / 01
+              2026 / 08 / 23
             </div>
             <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
-              zebra-rs v26.8.1 pairs with <a href="https://github.com/cradle-rs/cradle-rs" target="_blank" rel="noopener" style={{ color: "var(--accent)" }}>cradle-rs v1.0.0</a>, a new
-              XDP/eBPF forwarding engine, to deliver full routing and switching in the data
-              plane: L2, L3, MPLS, SRv6 and VXLAN — including EVPN with both E-LAN and
-              E-LINE services over all three encapsulations (EVPN/VXLAN, EVPN/MPLS and
-              EVPN/SRv6). To our knowledge, this is a first on Linux.
+              Today, we have a very powerful AI. It can read an RFC, write a config, and
+              explain a routing table. What it cannot do — not reliably yet — is{" "}
+              <em style={{ color: "var(--fg)" }}>understand your network</em>. A language
+              model that has never seen your topology will happily invent an fake interface
+              name, attach a metric to the wrong side of a link, and describe the result
+              with total confidence.
             </p>
             <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
-              Everything runs on a vanilla Linux kernel — no out-of-tree modules, no kernel
-              patches, no DPDK. The eBPF engine (pure Rust, built on aya — no clang or
-              libbpf) simply implements what stock kernel forwarding cannot:
+              So the interesting question is not "can AI configure a router?" It is:{" "}
+              <span style={{ color: "var(--fg)" }}>what does an AI need to be given</span>,
+              so that modifying a router configuration becomes a safe, validatable act?
             </p>
-            <ul style={{ margin: "0 0 14px", paddingLeft: 20, fontSize: 15.5, lineHeight: 1.7, color: "var(--fg-soft)" }}>
-              <li><span style={{ color: "var(--fg)" }}>EVPN E-LAN over SRv6.</span> The kernel has no End.DT2U (known unicast) or End.DT2M (BUM) seg6local actions, so an SRv6 L2 EVPN is impossible with native forwarding. cradle-rs implements both.</li>
-              <li><span style={{ color: "var(--fg)" }}>EVPN E-LINE / VPWS over SRv6.</span> Likewise, the End.DX2 / End.DX2V cross-connect behaviors do not exist in the kernel.</li>
-              <li><span style={{ color: "var(--fg)" }}>EVPN over MPLS — both E-LAN and E-LINE.</span> Kernel MPLS forwards IP only; there is no disposition that pops a service label and hands the exposed Ethernet frame to a bridge domain or an attachment circuit. cradle-rs provides the complete L2-over-MPLS datapath.</li>
-              <li><span style={{ color: "var(--fg)" }}>SRv6 P2MP replication segments (RFC 9524).</span> End.Replicate fan-out at the root plus End.DT2M decap at the leaves lets EVPN BUM traffic ride a replication tree instead of paying the ingress-replication tax. The stock kernel cannot forward an SR replication tree at all.</li>
-              <li><span style={{ color: "var(--fg)" }}>Both RFC 9800 SID compressions.</span> NEXT-C-SID (uSID — uN, uA, uT) and REPLACE-C-SID, alongside the RFC 8986 flavors. Kernel 6.8 has no REPLACE-C-SID support whatsoever, and no uSID composition for End.T — cradle-rs is the only data plane for those SIDs.</li>
-              <li><span style={{ color: "var(--fg)" }}>BGP MUP (SAFI 85): a 5G user plane wired by BGP.</span> The mainline kernel has no GTP forwarding action. cradle-rs encapsulates and decapsulates GTP-U over IPv4 and IPv6 driven directly by BGP MUP routes — including SRv6↔GTP interworking and VRF-scoped session lookup — validated live against free5GC (end-to-end UE ping).</li>
-            </ul>
-            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
-              You can experience every flavor of SRv6 — and every EVPN encapsulation — on an
-              unmodified distribution kernel, with zebra-rs as the real control plane
-              programming the eBPF FIBs.
+            <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
+              The <code>isis-flexalgo-ai</code> playset in zebra-rs is an attempt at an
+              answer. It is a small, fully virtual IS-IS network — a handful of nodes, a few
+              deliberately asymmetric links — plus an agent that is asked, in plain
+              language, to make traffic behave differently. Not by editing configuration
+              files directly, but by reasoning over a model of the network and then emitting
+              intent.
             </p>
-            <p style={{ margin: "14px 0 0", fontSize: 15, lineHeight: 1.6, color: "var(--fg-soft)" }}>
+            <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
+              The loop has three parts:{" "}
+              <span style={{ color: "var(--fg)" }}>understand the network</span>,{" "}
+              <span style={{ color: "var(--fg)" }}>decide the routing with intent</span>,{" "}
+              <span style={{ color: "var(--fg)" }}>validate it happened</span>. The full
+              walkthrough is on the{" "}
+              <a href="ai.html" style={{ color: "var(--accent)" }}>AI page</a>.
+            </p>
+            <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: "var(--fg-soft)" }}>
               See <a href="news.html" style={{ color: "var(--accent)" }}>all news</a> for earlier announcements.
             </p>
           </div>
