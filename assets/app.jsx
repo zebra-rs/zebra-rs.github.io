@@ -84,7 +84,7 @@ function App() {
             {view === "A" && <TerminalPanel />}
             {view === "B" && <IsisPanel />}
             {view === "C" && <TopologyPanel />}
-            {view === "D" && <IsisSpfPanel />}
+            {view === "D" && <IsisFleetPanel />}
             <ViewSwitch view={view} setView={pickView} />
           </div>
         </div>
