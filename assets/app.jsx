@@ -23,7 +23,7 @@ function App() {
   useEffectApp(() => {
     if (autoPaused) return;
     const id = setInterval(() => {
-      setView(v => (v === "A" ? "B" : v === "B" ? "C" : "A"));
+      setView(v => (v === "A" ? "B" : v === "B" ? "C" : v === "C" ? "D" : "A"));
     }, 6000);
     return () => clearInterval(id);
   }, [autoPaused]);
@@ -66,13 +66,14 @@ function App() {
       if (e.key === "1") pickView("A");
       if (e.key === "2") pickView("B");
       if (e.key === "3") pickView("C");
+      if (e.key === "4") pickView("D");
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   return (
-    <div data-screen-label={`0${view === "A" ? 1 : view === "B" ? 2 : 3} ${view}`} style={{ position: "relative", zIndex: 1 }}>
+    <div data-screen-label={`0${view === "A" ? 1 : view === "B" ? 2 : view === "C" ? 3 : 4} ${view}`} style={{ position: "relative", zIndex: 1 }}>
       <div className="grid-bg" />
       <Header mono={mono} dark={dark} onToggleTheme={() => setDark(d => !d)} />
 
@@ -83,6 +84,7 @@ function App() {
             {view === "A" && <TerminalPanel />}
             {view === "B" && <IsisPanel />}
             {view === "C" && <TopologyPanel />}
+            {view === "D" && <IsisSpfPanel />}
             <ViewSwitch view={view} setView={pickView} />
           </div>
         </div>
