@@ -171,44 +171,57 @@ function AIApp() {
           <p>
             Visualization is the same model rendered for humans. The topology drawing is not
             documentation produced <em>alongside</em> the network — it is the ontology,
-            drawn. When the agent says "I will avoid the red links," the operator can look
-            at exactly the same graph and see which links those are. Shared representation
-            is what makes review possible; if the human and the agent are looking at
-            different pictures, the review is theatre.
+            drawn. When the agent says, "I will avoid the red link," the operator can look
+            at exactly the same graph and understand that the agent intends to avoid the
+            Tokyo–San Jose link.
+          </p>
+          <p>
+            The link seen by the agent and the link seen by the operator refer to the same
+            underlying entity, while the ontology provides both of them with access to a
+            richer layer of contextual information.
           </p>
 
           <h2 id="sovereign-routing">Sovereign Routing with Intent</h2>
           <p>
-            The scenario the playset uses is deliberately not a toy metric change. It is{" "}
-            <strong>sovereign routing</strong>: some traffic must stay inside a defined
-            boundary, even when the shortest path leaves it.
+            The scenario is <strong>sovereign routing</strong>: some traffic must stay inside
+            a defined boundary, even when the shortest path leaves it.
           </p>
           <p>
-            Classic IS-IS gives you one answer per destination. Every prefix is reached over
-            the same SPF result, computed with the same metric, for every service. If the
-            cheapest path crosses a link you would rather not cross, your options are blunt:
-            raise the metric and distort routing for everyone, or build a parallel overlay
-            and maintain it forever.
+            Classic IS-IS gives one answer per destination — the same SPF result, the same
+            metric, for every service. If the cheapest path crosses a link you would rather
+            avoid, the options are blunt: raise the metric and distort routing for everyone,
+            or build a parallel overlay and maintain it forever.
           </p>
           <p>
-            <strong>IS-IS Flexible Algorithm</strong> (RFC 9350) removes that constraint.
-            Instead of one SPF, the domain agrees on a set of numbered algorithms, each with
-            its own <strong>Flex-Algorithm Definition (FAD)</strong>:
-          </p>
-          <ul>
-            <li>which metric to optimize — IGP cost, TE metric, or minimum unidirectional delay;</li>
-            <li>which links to exclude — by affinity colour;</li>
-            <li>which links to require.</li>
-          </ul>
-          <p>
-            Every node that participates advertises a separate prefix-SID per algorithm.
-            Algorithm 0 stays as it always was. Algorithm 128 might be "minimize delay."
-            Algorithm 129 might be "exclude everything coloured red." Steering traffic then
-            means choosing a SID, not rebuilding a network.
+            <strong>IS-IS Flexible Algorithm</strong> (RFC 9350) removes that constraint. The
+            domain agrees on a set of numbered algorithms, each with its own{" "}
+            <strong>Flex-Algorithm Definition (FAD)</strong>: which metric to optimize (IGP
+            cost, TE metric, or minimum unidirectional delay), which links to exclude by
+            affinity colour, and which links to require.
           </p>
           <p>
-            This is where the ontology earns its place. The operator's instruction is a
-            prompt to Claude Desktop:
+            We can have different policy routing dicision in SPF=128.
+          </p>
+          <p>
+            Now, let's try something a little more challenging. Suppose we want to configure
+            the network so that it does not use any links crossing the Pacific Ocean.
+          </p>
+          <p>
+            Traditionally, we would be required to do the following:
+          </p>
+          <ol>
+            <li><strong>Identify, one by one, which links cross the Pacific with ontology information.</strong></li>
+            <li><strong>Assign an affinity value to each of those links on the relevant routers.</strong></li>
+            <li><strong>Configure SPF=128 to compute a routing table that avoids those links.</strong></li>
+          </ol>
+          <p>
+            If we were not familiar with how to configure the target routers, we would also
+            need to learn the required configuration syntax on the fly. On top of that, we
+            would need to verify that the resulting configuration is correct.
+          </p>
+          <p>
+            Today, all of these steps can be carried out by giving Claude Desktop the
+            following prompt.
           </p>
           <blockquote>
             <p style={{ fontFamily: "var(--font-mono)", fontSize: 13.5, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{`Constrained traffic may not cross trans-Pacific links. Design and deploy an
@@ -314,11 +327,15 @@ https://zebra.rs/docs.html#ch-07-11-isis-flexalgo`}</p>
 
           <h2 id="validation-loop">Validation Loop</h2>
           <p>
-            An agent that configures a network and then declares success is worse than no
-            agent at all. The final piece of the playset is the part that refuses to take
-            the model's word for it.
+            The router configuration may also fail. In that case, AI investigate the cause
+            and repeat the process until the correct configuration is successfully applied.
           </p>
-          <p>After the FAD is applied, the loop closes against the running system:</p>
+          <p>
+            Even agent successfully configures routers and then declares success is worse
+            than no agent at all. The final piece of the playset is the part that refuses to
+            take the model's word for it.
+          </p>
+          <p>After the configuration is applied, the AI runs the following loop against the live system:</p>
           <ol>
             {VALIDATION_STEPS.map(([q, a]) => (
               <li key={q} style={{ marginBottom: 10 }}>
@@ -343,10 +360,6 @@ https://zebra.rs/docs.html#ch-07-11-isis-flexalgo`}</p>
             is expressed as something it can reason over, when the operator's intent maps
             onto a mechanism precise enough to carry it — Flex-Algo, here — and when every
             claim it makes is answerable by the network itself.
-          </p>
-          <p style={{ color: "var(--fg)" }}>
-            Model, mechanism, and proof. Take away any one, and what is left is a very
-            confident guess.
           </p>
         </div>
       </main>
