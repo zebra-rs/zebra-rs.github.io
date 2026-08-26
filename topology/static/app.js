@@ -40,6 +40,7 @@ const REGION_COLORS = {
     US: '#3b82f6',
     EU: '#2ecc71',
     AP: '#f59e0b',
+    SA: '#a855f7',
 };
 
 const BASE_ARC_COLOR = 'rgba(170, 180, 200, 0.35)';

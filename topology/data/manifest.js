@@ -1,1 +1,1 @@
-window.ZEBRA_SNAPSHOT = {"generatedAtEpoch":1787537772,"playset":"isis-flexalgo","routers":11,"topologies":22};
+window.ZEBRA_SNAPSHOT = {"generatedAtEpoch":1787588758,"playset":"isis-flexalgo","routers":14,"topologies":28};
