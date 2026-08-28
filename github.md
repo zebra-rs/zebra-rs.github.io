@@ -6,20 +6,21 @@ path: book/src
 
 ## Last sync
 
-date: 2026-08-27T16:02:55Z
-commit: 572bd2fc3f2e
+date: 2026-08-28T22:22:48Z
+commit: d914c06804ec
 
 ### Updated in this project
 
-- Refreshed all 143 book chapters into `book/docs-data.js` (the data file `docs.html` loads).
-- New chapter picked up: IS-IS Area Proxy (`ch-07-12-isis-area-proxy.md`).
+- Refreshed all 145 book chapters into `book/docs-data.js` (the data file `docs.html` loads).
+- New chapters picked up: BGP OTC/Role (`ch-02-42-bgp-otc-role.md`), BGP Route Server (`ch-02-43-bgp-route-server.md`).
+- protocols.html: added RFC 9234 and RFC 7947 to BGP; RFC 9666 and RFC 9667 to IS-IS.
 - Cleaned up temp chunk files and root-level `.md` copies after the rebuild.
 
 ## Screen map
 
 | Screen | Built from |
 | --- | --- |
-| docs.html | `book/src/*.md` (all 143 chapters, via `book/docs-data.js`); sidebar order from `book/src/SUMMARY.md` |
+| docs.html | `book/src/*.md` (all 145 chapters, via `book/docs-data.js`); sidebar order from `book/src/SUMMARY.md` |
 | protocols.html | `book/src/appendix-b-supported-rfcs.md` (mirrored into `assets/rfcs.jsx`) |
 | install.html | `book/src/ch-00-06-install.md`, `book/src/ch-00-07-building.md` |
 | playset.html | repo `playset/` READMEs + `playset/images/*.png` |
@@ -36,6 +37,8 @@ commit: 572bd2fc3f2e
   from that sweep.
 
 ## Sync history
+
+- 2026-08-27T16:02:55Z — commit 572bd2fc3f2e — 143 chapters; added IS-IS Area Proxy.
 
 - 2026-08-19T23:48:18Z — commit 9a291ce45aa1 — 142 chapters; added IS-IS Flexible Algorithm.
 

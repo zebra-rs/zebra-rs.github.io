@@ -32,6 +32,8 @@ const RFC_AREAS = [
     ["RFC 6996", "Autonomous System (AS) Reservation for Private Use (remove-private-as range)."],
     ["RFC 8950", "Advertising IPv4 NLRI with an IPv6 Next Hop (updates RFC 5549) — IPv6 unnumbered peering."],
     ["RFC 9830", "Advertising Segment Routing Policies in BGP (SR Policy, SAFI 73)."],
+    ["RFC 9234", "Route Leak Prevention and Detection Using Roles in UPDATE and OPEN Messages \u2014 otc-local-role, the BGP Role capability and the Only-to-Customer attribute."],
+    ["RFC 7947", "Internet Exchange BGP Route Server \u2014 route-server-client (transparent AS_PATH and next-hop toward clients; path hiding via ADD-PATH)."],
     ["draft-ietf-bess-mup-safi", "BGP Mobile User Plane (MUP) SAFI 85 — Type-1 Session Transformed and Type-2 Direct Segment routes."],
   ]},
   { id: "ospfv2",  label: "OSPFv2",  col: "var(--z-blue)", rfcs: [
@@ -84,6 +86,8 @@ const RFC_AREAS = [
     ["RFC 9352", "IS-IS Extensions to Support Segment Routing over the IPv6 Data Plane (SRv6)."],
     ["RFC 9350", "IGP Flexible Algorithm (Flex-Algo) constraint-based SPF."],
     ["RFC 9490", "Topology-Independent Loop-Free Alternate (TI-LFA) fast reroute using Segment Routing."],
+    ["RFC 9666", "Area Proxy for IS-IS \u2014 a Level-1 area presented to the Level-2 backbone as a single proxy node (Proxy LSP, boundary filtering, Area SID)."],
+    ["RFC 9667", "Dynamic Flooding on Dense Graphs \u2014 the Area Leader election sub-TLV, as reused by Area Proxy."],
   ]},
   { id: "pim",     label: "PIM",     col: "var(--z-sage)", rfcs: [
     ["RFC 7761", "Protocol Independent Multicast — Sparse Mode (PIM-SM), the base ASM protocol (shared tree, Register, SPT switch, Assert, DR election) for both IPv4 and IPv6."],
