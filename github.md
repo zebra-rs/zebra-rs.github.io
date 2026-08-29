@@ -6,14 +6,13 @@ path: book/src
 
 ## Last sync
 
-date: 2026-08-28T22:22:48Z
-commit: d914c06804ec
+date: 2026-08-29T04:44:36Z
+commit: 6bb78777e103
 
 ### Updated in this project
 
 - Refreshed all 145 book chapters into `book/docs-data.js` (the data file `docs.html` loads).
-- New chapters picked up: BGP OTC/Role (`ch-02-42-bgp-otc-role.md`), BGP Route Server (`ch-02-43-bgp-route-server.md`).
-- protocols.html: added RFC 9234 and RFC 7947 to BGP; RFC 9666 and RFC 9667 to IS-IS.
+- Chapter renamed upstream: `ch-02-42-bgp-otc-role.md` → `ch-02-42-bgp-otc-local-role.md`.
 - Cleaned up temp chunk files and root-level `.md` copies after the rebuild.
 
 ## Screen map
@@ -37,6 +36,8 @@ commit: d914c06804ec
   from that sweep.
 
 ## Sync history
+
+- 2026-08-28T22:22:48Z — commit d914c06804ec — 145 chapters; added BGP OTC/Role, BGP Route Server; protocols.html gained RFC 9234, 7947, 9666, 9667.
 
 - 2026-08-27T16:02:55Z — commit 572bd2fc3f2e — 143 chapters; added IS-IS Area Proxy.
 
