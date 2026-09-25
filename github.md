@@ -6,13 +6,13 @@ path: book/src
 
 ## Last sync
 
-date: 2026-08-29T04:44:36Z
-commit: 6bb78777e103
+date: 2026-09-25T03:25:10Z
+commit: 79feacc05663
 
 ### Updated in this project
 
 - Refreshed all 145 book chapters into `book/docs-data.js` (the data file `docs.html` loads).
-- Chapter renamed upstream: `ch-02-42-bgp-otc-role.md` → `ch-02-42-bgp-otc-local-role.md`.
+- Content refresh only (no chapters added or removed); version pill bumped to v26.9.2.
 - Cleaned up temp chunk files and root-level `.md` copies after the rebuild.
 
 ## Screen map
@@ -36,6 +36,8 @@ commit: 6bb78777e103
   from that sweep.
 
 ## Sync history
+
+- 2026-08-29T04:44:36Z — commit 6bb78777e103 — 145 chapters; OTC chapter renamed to otc-local-role.
 
 - 2026-08-28T22:22:48Z — commit d914c06804ec — 145 chapters; added BGP OTC/Role, BGP Route Server; protocols.html gained RFC 9234, 7947, 9666, 9667.
 
