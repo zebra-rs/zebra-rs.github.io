@@ -6,13 +6,12 @@ path: book/src
 
 ## Last sync
 
-date: 2026-09-25T03:25:10Z
-commit: 79feacc05663
+date: 2026-10-18T19:34:26Z
 
 ### Updated in this project
 
 - Refreshed all 145 book chapters into `book/docs-data.js` (the data file `docs.html` loads).
-- Content refresh only (no chapters added or removed); version pill bumped to v26.9.2.
+- 149 chapters (was 145). New: BGP bestpath MED, EVPN single-active, EVPN dup-addr, EVPN E-Tree, BGP/IS-IS/OSPF/OSPFv3/policy show chapters, RIB. Version pill bumped to v26.10.2.
 - Cleaned up temp chunk files and root-level `.md` copies after the rebuild.
 
 ## Screen map
@@ -36,6 +35,8 @@ commit: 79feacc05663
   from that sweep.
 
 ## Sync history
+
+- 2026-09-25T03:25:10Z — commit 79feacc05663 — 145 chapters, content refresh.
 
 - 2026-08-29T04:44:36Z — commit 6bb78777e103 — 145 chapters; OTC chapter renamed to otc-local-role.
 
