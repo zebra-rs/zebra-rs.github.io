@@ -21,10 +21,13 @@ date: 2026-10-18T19:34:26Z
 | docs.html | `book/src/*.md` (all 145 chapters, via `book/docs-data.js`); sidebar order from `book/src/SUMMARY.md` |
 | protocols.html | `book/src/appendix-b-supported-rfcs.md` (mirrored into `assets/rfcs.jsx`) |
 | install.html | `book/src/ch-00-06-install.md`, `book/src/ch-00-07-building.md` |
+| evpn.html | `docs/blog/evpn-e-line-e-lan-e-tree.md` (via `assets/evpn-md.js`), `docs/blog/images/evpn-services-architecture.svg`, `playset/images/BgpEvpnServices.svg` |
 | playset.html | repo `playset/` READMEs + `playset/images/*.png` |
 | index.html | hand-authored landing page (version pill tracks the latest release tag) |
 
 ## Notes
+
+- The EVPN diagrams (`assets/evpn-services-architecture.svg`, `assets/playset-BgpEvpnServices.svg`) lose their inline `<style>` block on import, which renders every shape black. After re-importing them, restore the class styles from the repo source.
 
 - `docs.html` renders the Markdown source into this site's own theme; the repo's
   pre-rendered mdBook HTML under `book/book/` is intentionally not used.

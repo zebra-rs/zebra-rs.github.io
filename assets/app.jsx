@@ -88,41 +88,29 @@ function App() {
         </div>
 
         <section id="news" style={{ paddingTop: 48 }}>
-          <SectionHead eyebrow="news" titleClass="news-title" title="2026/08/23 — AI, Ontology and Networking" />
+          <SectionHead eyebrow="news" titleClass="news-title" title="2026/10/19 — EVPN E-LINE, E-LAN and E-TREE" />
           <div className="card" style={{ maxWidth: 860 }}>
             <div className="mono" style={{ fontSize: 12.5, color: "var(--accent)", marginBottom: 12, letterSpacing: ".04em" }}>
-              2026 / 08 / 23
+              2026 / 10 / 19
             </div>
             <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
-              Today, we have a very powerful AI. It can read an RFC, write a config, and
-              explain a routing table. What it cannot do — not reliably yet — is{" "}
-              <em style={{ color: "var(--fg)" }}>understand your network</em>. A language
-              model that has never seen your topology will happily invent an fake interface
-              name, attach a metric to the wrong side of a link, and describe the result
-              with total confidence.
+              All three MEF Ethernet services — <span style={{ color: "var(--fg)" }}>E-LINE</span>,{" "}
+              <span style={{ color: "var(--fg)" }}>E-LAN</span> and <span style={{ color: "var(--fg)" }}>E-TREE</span> —
+              now run over all three cores: <span style={{ color: "var(--fg)" }}>VXLAN</span>,{" "}
+              <span style={{ color: "var(--fg)" }}>SR-MPLS</span> and <span style={{ color: "var(--fg)" }}>SRv6</span>.
+              That is nine combinations, all on a stock Linux kernel, with zebra-rs as the EVPN control plane and
+              cradle-rs as the eBPF data plane.
             </p>
-            <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
-              So the interesting question is not "can AI configure a router?" It is:{" "}
-              <span style={{ color: "var(--fg)" }}>what does an AI need to be given</span>,
-              so that modifying a router configuration becomes a safe, validatable act?
-            </p>
-            <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
-              The <code>isis-flexalgo-ai</code> playset in zebra-rs is an attempt at an
-              answer. It is a small, fully virtual IS-IS network — a handful of nodes, a few
-              deliberately asymmetric links — plus an agent that is asked, in plain
-              language, to make traffic behave differently. Not by editing configuration
-              files directly, but by reasoning over a model of the network and then emitting
-              intent.
-            </p>
-            <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6, color: "var(--fg-soft)" }}>
-              The loop has three parts:{" "}
-              <span style={{ color: "var(--fg)" }}>understand the network</span>,{" "}
-              <span style={{ color: "var(--fg)" }}>decide the routing with intent</span>,{" "}
-              <span style={{ color: "var(--fg)" }}>validate it happened</span>. The full
-              walkthrough is on the{" "}
-              <a href="ai.html" style={{ color: "var(--accent)" }}>AI page</a>.
-            </p>
+            <ul style={{ margin: "0 0 14px", paddingLeft: 20, fontSize: 15.5, lineHeight: 1.7, color: "var(--fg-soft)" }}>
+              <li>One configuration model: switching encapsulation is the <code>encapsulation vxlan | mpls | srv6</code> knob plus its underlay.</li>
+              <li>E-TREE leaf isolation across the core: a leaf label on MPLS, a leaf argument on the End.DT2M SID on SRv6, and a coloured IMET on VXLAN.</li>
+              <li>cradle-rs fills what the kernel lacks — MPLS-to-bridge disposition, End.DX2 / End.DT2U / End.DT2M, and E-TREE and multihoming filters.</li>
+            </ul>
             <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: "var(--fg-soft)" }}>
+              Read the full write-up, with configs and packet captures, on the{" "}
+              <a href="evpn.html" style={{ color: "var(--accent)" }}>EVPN page</a>. Three playsets reproduce the same topology on a laptop.
+            </p>
+            <p style={{ margin: "14px 0 0", fontSize: 15, lineHeight: 1.6, color: "var(--fg-soft)" }}>
               See <a href="news.html" style={{ color: "var(--accent)" }}>all news</a> for earlier announcements.
             </p>
           </div>

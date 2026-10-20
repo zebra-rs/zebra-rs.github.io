@@ -48,12 +48,13 @@ function Header({ mono, onToggleTheme, dark }) {
             <ZebraLogo size={34} mono={mono} intro />
             <span className="brand-word" style={{ fontSize: 22, letterSpacing: -0.2 }}>zebra-rs</span>
           </a>
-          <a href="https://github.com/zebra-rs/zebra-rs/releases/tag/v26.10.2" target="_blank" rel="noopener" className="pill mono brand-pill" title="Release notes — v26.10.2">
-            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.10.2
+          <a href="https://github.com/zebra-rs/zebra-rs/releases/tag/v26.10.3" target="_blank" rel="noopener" className="pill mono brand-pill" title="Release notes — v26.10.3">
+            <span className="dot2" style={{ background: "var(--accent)" }}/> v26.10.3
           </a>
         </div>
         <nav className="site-nav">
           <a className="nav-link nav-link-secondary" href="ai.html" style={{ color: "var(--fg-soft)" }}>AI</a>
+          <a className="nav-link nav-link-secondary" href="evpn.html" style={{ color: "var(--fg-soft)" }}>EVPN</a>
           <a className="nav-link nav-link-secondary" href="news.html" style={{ color: "var(--fg-soft)" }}>news</a>
           <a className="nav-link nav-link-secondary" href="install.html" style={{ color: "var(--fg-soft)" }}>install</a>
           <a className="nav-link nav-link-secondary" href="playset.html" style={{ color: "var(--fg-soft)" }}>playset</a>
@@ -441,24 +442,65 @@ function ViewSwitch({ view, setView }) {
   );
 }
 
+/* ─────────────────────────── EVPN service × encapsulation matrix ─────────────────────────── */
+function EvpnMatrix() {
+  const cols = ["VXLAN", "SR-MPLS", "SRv6"];
+  const rows = [
+    ["E-LINE", "point to point", ["cradle", "cradle", "cradle"]],
+    ["E-LAN", "multipoint", ["kernel or cradle", "cradle", "cradle"]],
+    ["E-TREE", "rooted multipoint", ["cradle", "cradle", "cradle"]],
+  ];
+  const cell = { padding: "9px 12px", borderBottom: "1px solid var(--border)", textAlign: "left" };
+  return (
+    <div style={{ border: "1px solid var(--border-strong)", borderRadius: 10, overflow: "hidden", background: "var(--bg-card)", maxWidth: 540, margin: "0 0 26px" }}>
+      <table className="mono" style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5 }}>
+        <thead>
+          <tr style={{ background: "var(--bg-soft)" }}>
+            <th style={{ ...cell, color: "var(--fg-muted)", fontWeight: 500, fontSize: 10.5, letterSpacing: ".1em", textTransform: "uppercase" }}>service</th>
+            {cols.map(c => <th key={c} style={{ ...cell, color: "var(--fg)", fontWeight: 500 }}>{c}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([name, shape, vals], i) => (
+            <tr key={name}>
+              <td style={{ ...cell, borderBottom: i === rows.length - 1 ? 0 : cell.borderBottom }}>
+                <div style={{ color: "var(--fg)" }}>{name}</div>
+                <div style={{ color: "var(--fg-muted)", fontSize: 10.5 }}>{shape}</div>
+              </td>
+              {vals.map((v, j) => (
+                <td key={j} style={{ ...cell, borderBottom: i === rows.length - 1 ? 0 : cell.borderBottom, color: "var(--fg-soft)" }}>
+                  <span style={{ color: "#4ec17a", marginRight: 6 }}>✓</span>{v}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <a href="evpn.html" className="mono" style={{ display: "block", padding: "9px 12px", fontSize: 11.5, borderTop: "1px solid var(--border)", color: "var(--accent)" }}>read the EVPN write-up →</a>
+    </div>
+  );
+}
+
 /* ─────────────────────────── Shared left hero ─────────────────────────── */
 function LeftHero() {
   return (
     <div>
       <div className="pill mono" style={{ marginBottom: 20 }}>
-        <span className="dot2" style={{ background: "var(--accent)" }} /> ontology-driven · agent-ready
+        <span className="dot2" style={{ background: "var(--accent)" }} /> EVPN · 3 services × 3 cores · stock kernel
       </div>
       <h1 className="hero-h1" style={{
-        fontSize: "clamp(34px, 5.4vw, 64px)", lineHeight: 1.04,
-        margin: "0 0 20px", letterSpacing: -1.2, fontWeight: 400,
+        fontSize: "clamp(32px, 4.6vw, 56px)", lineHeight: 1.06,
+        margin: "0 0 20px", letterSpacing: -1.1, fontWeight: 400,
       }}>
-        AI, Ontology<br />
-        <span className="accent">and&nbsp;Networking.</span>
+        EVPN E-LINE, E-LAN<br />
+        <span style={{ color: "var(--fg-soft)" }}>and </span>
+        <span className="accent">E-TREE.</span>
       </h1>
       <p style={{
         fontSize: 17, lineHeight: 1.55, color: "var(--fg-soft)",
-        maxWidth: 520, margin: "0 0 28px",
-      }}>zebra-rs is a BGP, OSPF, and IS‑IS routing stack with SRv6, SR-MPLS, L3VPN, and EVPN extensions, written from scratch in Rust. It exposes the network to AI agents as an ontology — nodes, links, and the vocabulary that connects an attribute to an intent — over a native MCP server, so an agent can reason about your fabric instead of guessing at it. Memory‑safe, async to the core, idempotent by design.</p>
+        maxWidth: 540, margin: "0 0 18px",
+      }}>All three Ethernet services over VXLAN, SR-MPLS and SRv6 — nine combinations, one configuration model. zebra-rs is the EVPN control plane; cradle-rs forwards in eBPF on a vanilla Linux kernel.</p>
+      <EvpnMatrix />
       <div className="hero-cta">
         <a className="btn btn-primary" href="install.html">
           Get started
